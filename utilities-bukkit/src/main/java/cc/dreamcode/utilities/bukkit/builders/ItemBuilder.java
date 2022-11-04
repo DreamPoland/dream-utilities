@@ -1,7 +1,7 @@
-package cc.dreamcode.utilities.bukkit;
+package cc.dreamcode.utilities.bukkit.builders;
 
+import cc.dreamcode.utilities.bukkit.ChatUtil;
 import lombok.Setter;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
