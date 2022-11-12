@@ -1,4 +1,4 @@
-package cc.dreamcode.utilities.randomizers;
+package cc.dreamcode.utilities.randomizer;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package cc.dreamcode.utilities.builders;
+package cc.dreamcode.utilities.builder;
 
 import lombok.NoArgsConstructor;
 

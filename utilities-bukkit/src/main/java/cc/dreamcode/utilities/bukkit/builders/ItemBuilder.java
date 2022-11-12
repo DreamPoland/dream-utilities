@@ -1,6 +1,9 @@
 package cc.dreamcode.utilities.bukkit.builders;
 
 import cc.dreamcode.utilities.bukkit.ChatUtil;
+import eu.okaeri.placeholders.context.PlaceholderContext;
+import eu.okaeri.placeholders.message.CompiledMessage;
+import lombok.NonNull;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -9,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -110,6 +114,35 @@ public class ItemBuilder {
             itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
                     .stream()
                     .map(ChatUtil::fixColor)
+                    .collect(Collectors.toList()));
+        }
+
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public ItemBuilder fixColors(@NonNull Map<String, Object> replaceMap) {
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        assert itemMeta != null;
+
+        if (itemMeta.hasDisplayName()) {
+            final String colored = ChatUtil.fixColor(itemMeta.getDisplayName());
+            final CompiledMessage compiledMessage = CompiledMessage.of(colored);
+            final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
+
+            itemMeta.setDisplayName(placeholderContext.with(replaceMap).apply());
+        }
+
+        if (itemMeta.hasLore()) {
+            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+                    .stream()
+                    .map(text -> {
+                        final String colored = ChatUtil.fixColor(text);
+                        final CompiledMessage compiledMessage = CompiledMessage.of(colored);
+                        final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
+
+                        return placeholderContext.with(replaceMap).apply();
+                    })
                     .collect(Collectors.toList()));
         }
 

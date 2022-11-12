@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group 'cc.dreamcode'
-    version '1.0.1'
+    version '1.0.2'
 
     apply plugin: 'java-library'
     apply plugin: 'checkstyle'
@@ -34,6 +34,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven { url "https://repo.panda-lang.org/releases" }
+        maven { url "https://storehouse.okaeri.eu/repository/maven-public" }
     }
 }
 

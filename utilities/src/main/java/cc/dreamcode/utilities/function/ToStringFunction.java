@@ -1,4 +1,4 @@
-package cc.dreamcode.utilities.functions;
+package cc.dreamcode.utilities.function;
 
 @FunctionalInterface
 public interface ToStringFunction<T> {
