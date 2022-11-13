@@ -126,22 +126,20 @@ public class ItemBuilder {
         assert itemMeta != null;
 
         if (itemMeta.hasDisplayName()) {
-            final String colored = ChatUtil.fixColor(itemMeta.getDisplayName());
-            final CompiledMessage compiledMessage = CompiledMessage.of(colored);
+            final CompiledMessage compiledMessage = CompiledMessage.of(itemMeta.getDisplayName());
             final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
-            itemMeta.setDisplayName(placeholderContext.with(replaceMap).apply());
+            itemMeta.setDisplayName(ChatUtil.fixColor(placeholderContext.with(replaceMap).apply()));
         }
 
         if (itemMeta.hasLore()) {
             itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
                     .stream()
                     .map(text -> {
-                        final String colored = ChatUtil.fixColor(text);
-                        final CompiledMessage compiledMessage = CompiledMessage.of(colored);
+                        final CompiledMessage compiledMessage = CompiledMessage.of(text);
                         final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
-                        return placeholderContext.with(replaceMap).apply();
+                        return ChatUtil.fixColor(placeholderContext.with(replaceMap).apply());
                     })
                     .collect(Collectors.toList()));
         }
