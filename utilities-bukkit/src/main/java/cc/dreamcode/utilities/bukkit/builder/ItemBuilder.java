@@ -1,4 +1,4 @@
-package cc.dreamcode.utilities.bukkit.builders;
+package cc.dreamcode.utilities.bukkit.builder;
 
 import cc.dreamcode.utilities.bukkit.ChatUtil;
 import eu.okaeri.placeholders.context.PlaceholderContext;
