@@ -44,7 +44,7 @@ public class ItemBuilder {
             return;
         }
 
-        this.setItemStack(itemStack);
+        this.setItemStack(new ItemStack(itemStack));
     }
 
     public static ItemBuilder of(Material material) {
