@@ -4,34 +4,23 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.time.Duration;
+import java.time.Instant;
 
 @UtilityClass
 public class CountUtil {
-    public static long getCountDownSeconds(long start, int timeInSeconds) {
-        return (start / 1000) + timeInSeconds - (System.currentTimeMillis() / 1000);
+    public static Duration getCountDown(long startEpochMilli, long timeInMills) {
+        return Duration.ofMillis(startEpochMilli + timeInMills - Instant.now().toEpochMilli());
     }
 
-    public static long getCountDownSeconds(long start, Duration duration) {
-        return (start / 1000) + duration.getSeconds() - (System.currentTimeMillis() / 1000);
+    public static Duration getCountDown(long startEpochMilli, Duration duration) {
+        return getCountDown(startEpochMilli, duration.toMillis());
     }
 
-    public static long getCountDownMills(long start, long timeInMills) {
-        return start + timeInMills - System.currentTimeMillis();
+    public static Duration getCountDown(@NonNull Instant instant, long timeInMills) {
+        return Duration.ofMillis(instant.toEpochMilli() + timeInMills - Instant.now().toEpochMilli());
     }
 
-    public static long getCountDownMills(long start, Duration duration) {
-        return start + duration.toMillis() - System.currentTimeMillis();
-    }
-
-    public static boolean isOut(long start, int timeInSeconds) {
-        return getCountDownSeconds(start, timeInSeconds) < 0;
-    }
-
-    public static boolean isOut(long start, long timeInMills) {
-        return getCountDownMills(start, timeInMills) < 0;
-    }
-
-    public static boolean isOut(long start, @NonNull Duration duration) {
-        return getCountDownMills(start, duration.toMillis()) < 0;
+    public static Duration getCountDown(@NonNull Instant instant, Duration duration) {
+        return getCountDown(instant, duration.toMillis());
     }
 }
