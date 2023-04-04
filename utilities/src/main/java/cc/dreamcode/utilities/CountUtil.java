@@ -12,7 +12,7 @@ public class CountUtil {
         return Duration.ofMillis(startEpochMilli + timeInMills - Instant.now().toEpochMilli());
     }
 
-    public static Duration getCountDown(long startEpochMilli, Duration duration) {
+    public static Duration getCountDown(long startEpochMilli, @NonNull Duration duration) {
         return getCountDown(startEpochMilli, duration.toMillis());
     }
 
@@ -20,7 +20,11 @@ public class CountUtil {
         return Duration.ofMillis(instant.toEpochMilli() + timeInMills - Instant.now().toEpochMilli());
     }
 
-    public static Duration getCountDown(@NonNull Instant instant, Duration duration) {
+    public static Duration getCountDown(@NonNull Instant instant, @NonNull Duration duration) {
         return getCountDown(instant, duration.toMillis());
+    }
+
+    public static boolean isOut(@NonNull Duration duration) {
+        return duration.isZero() || duration.isNegative();
     }
 }
