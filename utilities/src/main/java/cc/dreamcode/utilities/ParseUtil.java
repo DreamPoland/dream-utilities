@@ -24,4 +24,22 @@ public class ParseUtil {
             return Optional.empty();
         }
     }
+
+    public static Optional<Float> parseFloat(@NonNull String arg) {
+        try {
+            float f = Float.parseFloat(arg);
+            return Optional.of(f);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Boolean> parseBoolean(@NonNull String arg) {
+        try {
+            boolean b = Boolean.parseBoolean(arg);
+            return Optional.of(b);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
 }
