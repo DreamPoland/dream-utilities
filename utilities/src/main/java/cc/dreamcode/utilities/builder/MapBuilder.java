@@ -2,6 +2,7 @@ package cc.dreamcode.utilities.builder;
 
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,11 @@ public class MapBuilder<K, V> {
 
     public MapBuilder<K, V> put(K k, V v) {
         this.map.put(k, v);
+        return this;
+    }
+
+    public MapBuilder<K, V> put(K[] array, V v) {
+        Arrays.stream(array).forEach(k -> this.put(k, v));
         return this;
     }
 
