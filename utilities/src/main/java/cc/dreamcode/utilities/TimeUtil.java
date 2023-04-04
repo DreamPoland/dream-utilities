@@ -37,15 +37,31 @@ public class TimeUtil {
         }
 
         if (days != 0) {
+            if (millisecondsFinal == 0L) {
+                return days + "d " + hours + "h " + minutes + "min " + seconds + "s";
+            }
+
             return days + "d " + hours + "h " + minutes + "min " + seconds + "s " + millisecondsFinal + "ms";
         }
         if (hours != 0) {
+            if (millisecondsFinal == 0L) {
+                return hours + "h " + minutes + "min " + seconds + "s";
+            }
+
             return hours + "h " + minutes + "min " + seconds + "s " + millisecondsFinal + "ms";
         }
         if (minutes != 0) {
+            if (millisecondsFinal == 0L) {
+                return minutes + "min " + seconds + "s";
+            }
+
             return minutes + "min " + seconds + "s " + millisecondsFinal + "ms";
         }
         if (seconds != 0) {
+            if (millisecondsFinal == 0L) {
+                return seconds + "s";
+            }
+
             return seconds + "s " + millisecondsFinal + "ms";
         }
 
