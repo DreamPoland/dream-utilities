@@ -21,7 +21,7 @@ public class IntRandomizer {
             return this.getSecondInteger();
         }
 
-        return new Random().ints(this.getFirstInteger(), this.getSecondInteger() + 1)
+        return new Random().ints(this.getFirstInteger(), this.getSecondInteger())
                 .findAny()
                 .orElse(this.getFirstInteger());
     }
