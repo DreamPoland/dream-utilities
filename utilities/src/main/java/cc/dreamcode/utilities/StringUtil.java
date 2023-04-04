@@ -3,6 +3,8 @@ package cc.dreamcode.utilities;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @UtilityClass
 public class StringUtil {
@@ -33,5 +35,15 @@ public class StringUtil {
             if(array[i] != null) stringBuilder.append(array[i]);
         }
         return stringBuilder.toString();
+    }
+
+    public static String getJoiningRangeAmount(int to) {
+        return getJoiningRangeAmount(1, to);
+    }
+
+    public static String getJoiningRangeAmount(int from, int to) {
+        return IntStream.rangeClosed(from, to + 1)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(", "));
     }
 }
