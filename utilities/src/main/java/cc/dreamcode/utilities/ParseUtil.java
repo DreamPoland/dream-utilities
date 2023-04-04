@@ -3,6 +3,8 @@ package cc.dreamcode.utilities;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
+import java.time.Duration;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 @UtilityClass
@@ -39,6 +41,15 @@ public class ParseUtil {
             boolean b = Boolean.parseBoolean(arg);
             return Optional.of(b);
         } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Duration> parsePeriod(@NonNull String period) {
+        try {
+            return Optional.ofNullable(Duration.parse("PT" + period.replace("d", "DT").toUpperCase()));
+        }
+        catch (DateTimeParseException e) {
             return Optional.empty();
         }
     }
