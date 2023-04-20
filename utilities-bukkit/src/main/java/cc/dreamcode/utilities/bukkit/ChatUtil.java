@@ -40,11 +40,12 @@ public class ChatUtil {
 
         final StringBuilder stringBuilder = new StringBuilder();
         String[] colors = text.split("&");
+
         Arrays.stream(colors).forEach(splitText -> {
 
-            if (splitText.startsWith("&#")) {
-                String hexColor = splitText.substring(2, 8);
-                Color color = Color.decode(hexColor);
+            if (splitText.startsWith("#")) {
+                String hexColor = splitText.substring(1, 7);
+                Color color = hexToRgb(hexColor);
 
                 if (BukkitReflectionUtil.isSupported(16)) {
                     stringBuilder.append(ChatColor.of(color));
@@ -53,12 +54,16 @@ public class ChatUtil {
                     stringBuilder.append(getClosestColor(color));
                 }
 
-                stringBuilder.append(splitText.substring(9));
+                stringBuilder.append(splitText.substring(8));
                 return;
             }
 
-            stringBuilder.append(splitText);
-
+            if (stringBuilder.length() == 0 && !text.startsWith("&")) {
+                stringBuilder.append(splitText);
+            }
+            else {
+                stringBuilder.append("&").append(splitText);
+            }
         });
 
         return ChatColor.translateAlternateColorCodes('&', stringBuilder.toString());
@@ -100,5 +105,13 @@ public class ChatUtil {
                 .map(Map.Entry::getValue)
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("Cannot resolve closest color to existing chat-color. (" + color + ")"));
+    }
+
+    private static Color hexToRgb(@NonNull String hex) {
+        return new Color(
+                Integer.valueOf(hex.substring(1, 3), 16),
+                Integer.valueOf(hex.substring(3, 5), 16),
+                Integer.valueOf(hex.substring(5, 7), 16)
+        );
     }
 }
