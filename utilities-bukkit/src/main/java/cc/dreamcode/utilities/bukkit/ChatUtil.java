@@ -18,13 +18,12 @@ public class ChatUtil {
     }
 
     public static String fixColor(@NonNull String text, @NonNull Map<String, Object> replaceMap) {
-        final String colorized = fixColor(text);
-        final CompiledMessage compiledMessage = CompiledMessage.of(colorized);
+        final CompiledMessage compiledMessage = CompiledMessage.of(text);
         final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
         placeholderContext.with(replaceMap);
 
-        return placeholderContext.apply();
+        return fixColor(placeholderContext.apply());
     }
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
