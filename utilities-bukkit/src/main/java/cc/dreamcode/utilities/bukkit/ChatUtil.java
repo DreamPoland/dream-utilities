@@ -12,11 +12,14 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @UtilityClass
 public class ChatUtil {
 
+    private static final Pattern hexPattern = Pattern.compile("&#([0-9A-Fa-f]{6})");
     private static final Map<Color, ChatColor> COLORS = new MapBuilder<Color, ChatColor>()
             .put(new Color(0), ChatColor.getByChar('0'))
             .put(new Color(170), ChatColor.getByChar('1'))
@@ -36,37 +39,8 @@ public class ChatUtil {
             .put(new Color(16777215), ChatColor.getByChar('f'))
             .build();
 
-    public static String fixColor(@NonNull String text) { // &#843234
-
-        final StringBuilder stringBuilder = new StringBuilder();
-        String[] colors = text.split("&");
-
-        Arrays.stream(colors).forEach(splitText -> {
-
-            if (splitText.startsWith("#")) {
-                String hexColor = splitText.substring(1, 7);
-                Color color = hexToRgb(hexColor);
-
-                if (BukkitReflectionUtil.isSupported(16)) {
-                    stringBuilder.append(ChatColor.of(color));
-                }
-                else {
-                    stringBuilder.append(getClosestColor(color));
-                }
-
-                stringBuilder.append(splitText.substring(8));
-                return;
-            }
-
-            if (stringBuilder.length() == 0 && !text.startsWith("&")) {
-                stringBuilder.append(splitText);
-            }
-            else {
-                stringBuilder.append("&").append(splitText);
-            }
-        });
-
-        return ChatColor.translateAlternateColorCodes('&', stringBuilder.toString());
+    public static String fixColor(@NonNull String text) {
+        return ChatColor.translateAlternateColorCodes('&', processRgb(text));
     }
 
     public static String fixColor(@NonNull String text, @NonNull Map<String, Object> replaceMap) {
@@ -104,10 +78,33 @@ public class ChatUtil {
                         Math.pow(color.getRed() - entry.getKey().getRed(), 2)))
                 .map(Map.Entry::getValue)
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("Cannot resolve closest color to existing chat-color. (" + color + ")"));
+                .orElseThrow(() -> new RuntimeException("Cannot find closest rgb color to format chat-color. (" + color + ")"));
     }
 
     private static Color hexToRgb(@NonNull String hex) {
         return new Color(Integer.parseInt(hex, 16));
+    }
+
+    private static String processRgb(@NonNull String text) {
+        Matcher matcher = hexPattern.matcher(text);
+
+        while (matcher.find()) {
+            final String hex = matcher.group(1);
+            final Color color = hexToRgb(hex);
+
+            final CompiledMessage compiledMessage = CompiledMessage.of(text);
+            final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
+
+            if (BukkitReflectionUtil.isSupported(16)) {
+                placeholderContext.with(matcher.group(), ChatColor.of(color));
+            }
+            else {
+                placeholderContext.with(matcher.group(), getClosestColor(color));
+            }
+
+            text = placeholderContext.apply();
+        }
+
+        return text;
     }
 }
