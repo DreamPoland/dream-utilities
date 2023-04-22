@@ -82,24 +82,24 @@ public class ChatUtil {
     }
 
     private static Color hexToRgb(@NonNull String hex) {
-        return new Color(Integer.parseInt(hex, 16));
+        return new Color(Integer.parseInt(hex.substring(2), 16));
     }
 
     private static String processRgb(@NonNull String text) {
         Matcher matcher = hexPattern.matcher(text);
 
         while (matcher.find()) {
-            final String hex = matcher.group(1);
+            final String hex = matcher.group();
             final Color color = hexToRgb(hex);
 
             final CompiledMessage compiledMessage = CompiledMessage.of(text);
             final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
             if (BukkitReflectionUtil.isSupported(16)) {
-                placeholderContext.with(matcher.group(), ChatColor.of(color));
+                placeholderContext.with(hex, ChatColor.of(color));
             }
             else {
-                placeholderContext.with(matcher.group(), getClosestColor(color));
+                placeholderContext.with(hex, getClosestColor(color));
             }
 
             text = placeholderContext.apply();
