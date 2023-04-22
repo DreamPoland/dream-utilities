@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -88,11 +89,12 @@ public class ChatUtil {
     private static String processRgb(@NonNull String text) {
         Matcher matcher = hexPattern.matcher(text);
 
+        AtomicReference<String> atomicText = new AtomicReference<>(text);
         while (matcher.find()) {
             final String hex = matcher.group();
             final Color color = hexToRgb(hex);
 
-            final CompiledMessage compiledMessage = CompiledMessage.of(text);
+            final CompiledMessage compiledMessage = CompiledMessage.of(atomicText.get());
             final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
             if (BukkitReflectionUtil.isSupported(16)) {
@@ -102,9 +104,9 @@ public class ChatUtil {
                 placeholderContext.with(hex, getClosestColor(color));
             }
 
-            text = placeholderContext.apply();
+            atomicText.set(placeholderContext.apply());
         }
 
-        return text;
+        return atomicText.get();
     }
 }
