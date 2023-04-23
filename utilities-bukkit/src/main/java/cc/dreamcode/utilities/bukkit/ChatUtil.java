@@ -94,17 +94,12 @@ public class ChatUtil {
             final String hex = matcher.group();
             final Color color = hexToRgb(hex);
 
-            final CompiledMessage compiledMessage = CompiledMessage.of(atomicText.get());
-            final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
-
             if (BukkitReflectionUtil.isSupported(16)) {
-                placeholderContext.with(hex, ChatColor.of(color));
+                atomicText.set(atomicText.get().replace(hex, ChatColor.of(color) + ""));
             }
             else {
-                placeholderContext.with(hex, getClosestColor(color));
+                atomicText.set(atomicText.get().replace(hex, getClosestColor(color) + ""));
             }
-
-            atomicText.set(placeholderContext.apply());
         }
 
         return atomicText.get();
