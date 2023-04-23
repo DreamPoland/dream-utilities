@@ -17,20 +17,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Setter
 public class ItemBuilder {
-    private ItemStack itemStack = new ItemStack(Material.AIR);
+    private final ItemStack itemStack;
 
     public ItemBuilder(@NonNull Material material) {
-        this.setItemStack(new ItemStack(material));
+        this.itemStack = new ItemStack(material);
     }
 
     public ItemBuilder(@NonNull Material material, int amount) {
-        this.setItemStack(new ItemStack(material, amount));
+        this.itemStack = new ItemStack(material, amount);
     }
 
     public ItemBuilder(@NonNull ItemStack itemStack) {
-        this.setItemStack(new ItemStack(itemStack));
+        this.itemStack = new ItemStack(itemStack);
     }
 
     public static ItemBuilder of(@NonNull Material material) {
@@ -47,6 +46,11 @@ public class ItemBuilder {
 
     public ItemBuilder setAmount(int amount) {
         this.itemStack.setAmount(amount);
+        return this;
+    }
+
+    public ItemBuilder setType(@NonNull Material material) {
+        this.itemStack.setType(material);
         return this;
     }
 
