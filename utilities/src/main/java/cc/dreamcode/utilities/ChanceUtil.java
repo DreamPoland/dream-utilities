@@ -2,14 +2,13 @@ package cc.dreamcode.utilities;
 
 import lombok.experimental.UtilityClass;
 
-import java.util.Optional;
 import java.util.Random;
 
 @UtilityClass
 public class ChanceUtil {
 
     public static int getRandomInteger(final int min, final int max) {
-        if (max > min) {
+        if (max < min) {
             throw new IllegalArgumentException("Max value cannot be smaller than min.");
         }
 
@@ -19,7 +18,7 @@ public class ChanceUtil {
     }
 
     public static long getRandomLong(final long min, final long max) {
-        if (max > min) {
+        if (max < min) {
             throw new IllegalArgumentException("Max value cannot be smaller than min.");
         }
 
@@ -29,7 +28,7 @@ public class ChanceUtil {
     }
 
     public static double getRandomDouble(final double min, final double max) {
-        if (max > min) {
+        if (max < min) {
             throw new IllegalArgumentException("Max value cannot be smaller than min.");
         }
 
