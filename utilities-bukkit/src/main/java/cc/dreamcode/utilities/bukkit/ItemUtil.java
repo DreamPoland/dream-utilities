@@ -18,7 +18,7 @@ public class ItemUtil {
         give(player, Lists.newArrayList(itemStack), location);
     }
 
-    public static void give(Player player, List<ItemStack> itemStacks, Location location){
+    public static void give(Player player, List<ItemStack> itemStacks, Location location) {
         if (player == null) {
             drop(itemStacks, location);
             return;
@@ -34,7 +34,7 @@ public class ItemUtil {
         give(player, Lists.newArrayList(itemStack), inventory);
     }
 
-    public static void give(Player player, List<ItemStack> itemStacks, Inventory inventory){
+    public static void give(Player player, List<ItemStack> itemStacks, Inventory inventory) {
         if (player == null) {
             addItems(itemStacks, inventory);
             return;
