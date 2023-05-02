@@ -32,7 +32,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven { url "https://repo.panda-lang.org/releases" }
         maven { url "https://storehouse.okaeri.eu/repository/maven-public" }
     }
 }
