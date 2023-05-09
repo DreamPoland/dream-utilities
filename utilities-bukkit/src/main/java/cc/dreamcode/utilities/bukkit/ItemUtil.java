@@ -1,6 +1,5 @@
 package cc.dreamcode.utilities.bukkit;
 
-import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
@@ -10,41 +9,33 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @UtilityClass
 public class ItemUtil {
 
-    public static void give(@NonNull Player player, @NonNull ItemStack itemStack, @NonNull Location location) {
-        give(player, Lists.newArrayList(itemStack), location);
+    public static void giveItem(@NonNull Player player, @NonNull ItemStack itemStack) {
+        giveItems(player, Collections.singletonList(itemStack));
     }
 
-    public static void give(@NonNull Player player, @NonNull List<ItemStack> itemStacks, @NonNull Location location) {
-        itemStacks.forEach(itemStack -> player.getInventory().addItem(itemStack).values().forEach(noAdded -> {
-            location.getWorld().dropItem(location, noAdded);
-        }));
+    public static void giveItems(@NonNull Player player, @NonNull List<ItemStack> itemStacks) {
+        itemStacks.forEach(itemStack ->
+                player.getInventory().addItem(itemStack).values().forEach(noAdded ->
+                        player.getWorld().dropItem(player.getLocation(), noAdded)));
     }
 
-    public static void give(@NonNull Player player, @NonNull ItemStack itemStack, @NonNull Inventory inventory) {
-        give(player, Lists.newArrayList(itemStack), inventory);
+    public static void dropItem(@NonNull ItemStack itemStack, @NonNull Location location) {
+        dropItems(Collections.singletonList(itemStack), location);
     }
 
-    public static void give(@NonNull Player player, @NonNull List<ItemStack> itemStacks, @NonNull Inventory inventory) {
-        itemStacks.forEach(itemStack -> player.getInventory().addItem(itemStack).values().forEach(noAdded -> {
-            addItem(noAdded, inventory);
-        }));
-    }
-
-    public static void drop(@NonNull ItemStack itemStack, @NonNull Location location) {
-        drop(Lists.newArrayList(itemStack), location);
-    }
-
-    public static void drop(@NonNull List<ItemStack> itemStacks, @NonNull Location location) {
-        itemStacks.forEach(itemStack -> location.getWorld().dropItem(location, itemStack));
+    public static void dropItems(@NonNull List<ItemStack> itemStacks, @NonNull Location location) {
+        itemStacks.forEach(itemStack -> Objects.requireNonNull(location.getWorld()).dropItem(location, itemStack));
     }
 
     public static void addItem(@NonNull ItemStack itemStack, @NonNull Inventory inventory) {
-        addItems(Lists.newArrayList(itemStack), inventory);
+        addItems(Collections.singletonList(itemStack), inventory);
     }
 
     public static void addItems(@NonNull List<ItemStack> itemStacks, @NonNull Inventory inventory) {
@@ -55,7 +46,7 @@ public class ItemUtil {
         Inventory newInv = Bukkit.createInventory(null, inventory.getSize());
         newInv.setContents(inventory.getContents());
 
-        return newInv.addItem(itemStack.clone()).values().size() == 0;
+        return newInv.addItem(itemStack.clone()).isEmpty();
     }
 
     public static boolean hasSpace(@NonNull Inventory inventory, @NonNull List<ItemStack> itemStacks) {
