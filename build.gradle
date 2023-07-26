@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group 'cc.dreamcode'
-    version '1.2.14'
+    version '1.2.15'
 
     apply plugin: 'java-library'
     apply plugin: 'checkstyle'
@@ -24,9 +24,7 @@ allprojects {
         }
     }
 
-    compileJava.options.encoding = 'UTF-8'
-
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
     }
 
