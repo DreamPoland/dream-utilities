@@ -17,13 +17,21 @@ import java.util.Objects;
 public class ItemUtil {
 
     public static void giveItem(@NonNull Player player, @NonNull ItemStack itemStack) {
-        giveItems(player, Collections.singletonList(itemStack));
+        giveItems(player, player.getLocation(), Collections.singletonList(itemStack));
     }
 
     public static void giveItems(@NonNull Player player, @NonNull List<ItemStack> itemStacks) {
+        giveItems(player, player.getLocation(), itemStacks);
+    }
+
+    public static void giveItem(@NonNull Player player, @NonNull Location location, @NonNull ItemStack itemStack) {
+        giveItems(player, location, Collections.singletonList(itemStack));
+    }
+
+    public static void giveItems(@NonNull Player player, @NonNull Location location, @NonNull List<ItemStack> itemStacks) {
         itemStacks.forEach(itemStack ->
                 player.getInventory().addItem(itemStack).values().forEach(noAdded ->
-                        player.getWorld().dropItem(player.getLocation(), noAdded)));
+                        location.getWorld().dropItem(location, noAdded)));
     }
 
     public static void dropItem(@NonNull ItemStack itemStack, @NonNull Location location) {
