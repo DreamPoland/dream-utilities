@@ -3,6 +3,7 @@ package cc.dreamcode.utilities;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
+import java.math.BigInteger;
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
@@ -13,6 +14,33 @@ public class ParseUtil {
         try {
             int i = Integer.parseInt(arg);
             return Optional.of(i);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Long> parseLong(@NonNull String arg) {
+        try {
+            long l = Long.parseLong(arg);
+            return Optional.of(l);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Short> parseShort(@NonNull String arg) {
+        try {
+            short s = Short.parseShort(arg);
+            return Optional.of(s);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Byte> parseByte(@NonNull String arg) {
+        try {
+            byte b = Byte.parseByte(arg);
+            return Optional.of(b);
         } catch (NumberFormatException e) {
             return Optional.empty();
         }
@@ -36,11 +64,15 @@ public class ParseUtil {
         }
     }
 
-    public static Optional<Boolean> parseBoolean(@NonNull String arg) {
+    public static boolean parseBoolean(@NonNull String arg) {
+        return Boolean.parseBoolean(arg);
+    }
+
+    public static Optional<Character> parseChar(@NonNull String arg) {
         try {
-            boolean b = Boolean.parseBoolean(arg);
-            return Optional.of(b);
-        } catch (NumberFormatException e) {
+            char c = arg.charAt(0);
+            return Optional.of(c);
+        } catch (IndexOutOfBoundsException e) {
             return Optional.empty();
         }
     }
