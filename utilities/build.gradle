@@ -1,4 +1,7 @@
 dependencies {
+    // -- placeholders --
+    implementation 'eu.okaeri:okaeri-placeholders-core:4.0.7'
+
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testCompileOnly 'org.projectlombok:lombok:1.18.28'

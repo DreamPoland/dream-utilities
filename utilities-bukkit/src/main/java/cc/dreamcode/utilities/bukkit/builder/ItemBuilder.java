@@ -1,10 +1,10 @@
 package cc.dreamcode.utilities.bukkit.builder;
 
+import cc.dreamcode.utilities.builder.ListBuilder;
 import cc.dreamcode.utilities.bukkit.ChatUtil;
 import eu.okaeri.placeholders.context.PlaceholderContext;
 import eu.okaeri.placeholders.message.CompiledMessage;
 import lombok.NonNull;
-import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -64,6 +64,50 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder startLoreWith(@NonNull List<String> lore) {
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        assert itemMeta != null;
+
+        if (itemMeta.hasLore()) {
+            itemMeta.setLore(new ListBuilder<String>()
+                    .addAll(lore)
+                    .addAll(Objects.requireNonNull(itemMeta.getLore()))
+                    .build());
+        }
+        else {
+            itemMeta.setLore(lore);
+        }
+
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public ItemBuilder startLoreWith(@NonNull String... lore) {
+        return this.startLoreWith(Arrays.asList(lore));
+    }
+
+    public ItemBuilder endLoreWith(@NonNull List<String> lore) {
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        assert itemMeta != null;
+
+        if (itemMeta.hasLore()) {
+            itemMeta.setLore(new ListBuilder<String>()
+                    .addAll(Objects.requireNonNull(itemMeta.getLore()))
+                    .addAll(lore)
+                    .build());
+        }
+        else {
+            itemMeta.setLore(lore);
+        }
+
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public ItemBuilder endLoreWith(@NonNull String... lore) {
+        return this.endLoreWith(Arrays.asList(lore));
+    }
+
     public ItemBuilder setLore(@NonNull List<String> lore) {
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
@@ -121,7 +165,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder fixColors(@NonNull Map<String, Object> replaceMap) {
+    public ItemBuilder fixColors(@NonNull Map<String, Object> placeholders) {
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -129,7 +173,7 @@ public class ItemBuilder {
             final CompiledMessage compiledMessage = CompiledMessage.of(itemMeta.getDisplayName());
             final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
-            itemMeta.setDisplayName(ChatUtil.fixColor(placeholderContext.with(replaceMap).apply()));
+            itemMeta.setDisplayName(ChatUtil.fixColor(placeholderContext.with(placeholders).apply()));
         }
 
         if (itemMeta.hasLore()) {
@@ -139,7 +183,7 @@ public class ItemBuilder {
                         final CompiledMessage compiledMessage = CompiledMessage.of(text);
                         final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
-                        return ChatUtil.fixColor(placeholderContext.with(replaceMap).apply());
+                        return ChatUtil.fixColor(placeholderContext.with(placeholders).apply());
                     })
                     .collect(Collectors.toList()));
         }

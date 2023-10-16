@@ -1,15 +1,13 @@
 package cc.dreamcode.utilities.bungee;
 
+import cc.dreamcode.utilities.StringUtil;
 import cc.dreamcode.utilities.builder.MapBuilder;
-import eu.okaeri.placeholders.context.PlaceholderContext;
-import eu.okaeri.placeholders.message.CompiledMessage;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -44,13 +42,8 @@ public class ChatUtil {
         return ChatColor.translateAlternateColorCodes('&', processRgb(text));
     }
 
-    public static String fixColor(@NonNull String text, @NonNull Map<String, Object> replaceMap) {
-        final CompiledMessage compiledMessage = CompiledMessage.of(text);
-        final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
-
-        placeholderContext.with(replaceMap);
-
-        return fixColor(placeholderContext.apply());
+    public static String fixColor(@NonNull String text, @NonNull Map<String, Object> placeholders) {
+        return fixColor(StringUtil.replace(text, placeholders));
     }
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
@@ -59,9 +52,9 @@ public class ChatUtil {
                 .collect(Collectors.toList());
     }
 
-    public static List<String> fixColor(@NonNull List<String> stringList, @NonNull Map<String, Object> replaceMap) {
+    public static List<String> fixColor(@NonNull List<String> stringList, @NonNull Map<String, Object> placeholders) {
         return stringList.stream()
-                .map(text -> fixColor(text, replaceMap))
+                .map(text -> fixColor(text, placeholders))
                 .collect(Collectors.toList());
     }
 
@@ -69,17 +62,6 @@ public class ChatUtil {
         return Arrays.stream(strings)
                 .map(ChatUtil::fixColor)
                 .collect(Collectors.toList());
-    }
-
-    private static ChatColor getClosestColor(@NonNull Color color) {
-        return COLORS.entrySet()
-                .stream()
-                .sorted(Comparator.comparing(entry -> Math.pow(color.getRed() - entry.getKey().getRed(), 2) +
-                        Math.pow(color.getRed() - entry.getKey().getRed(), 2) +
-                        Math.pow(color.getRed() - entry.getKey().getRed(), 2)))
-                .map(Map.Entry::getValue)
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("Cannot find closest rgb color to format chat-color. (" + color + ")"));
     }
 
     private static Color hexToRgb(@NonNull String hex) {

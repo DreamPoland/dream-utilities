@@ -1,8 +1,7 @@
 package cc.dreamcode.utilities.bukkit;
 
+import cc.dreamcode.utilities.StringUtil;
 import cc.dreamcode.utilities.builder.MapBuilder;
-import eu.okaeri.placeholders.context.PlaceholderContext;
-import eu.okaeri.placeholders.message.CompiledMessage;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -44,13 +43,8 @@ public class ChatUtil {
         return ChatColor.translateAlternateColorCodes('&', processRgb(text));
     }
 
-    public static String fixColor(@NonNull String text, @NonNull Map<String, Object> replaceMap) {
-        final CompiledMessage compiledMessage = CompiledMessage.of(text);
-        final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
-
-        placeholderContext.with(replaceMap);
-
-        return fixColor(placeholderContext.apply());
+    public static String fixColor(@NonNull String text, @NonNull Map<String, Object> placeholders) {
+        return fixColor(StringUtil.replace(text, placeholders));
     }
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
@@ -59,9 +53,9 @@ public class ChatUtil {
                 .collect(Collectors.toList());
     }
 
-    public static List<String> fixColor(@NonNull List<String> stringList, @NonNull Map<String, Object> replaceMap) {
+    public static List<String> fixColor(@NonNull List<String> stringList, @NonNull Map<String, Object> placeholders) {
         return stringList.stream()
-                .map(text -> fixColor(text, replaceMap))
+                .map(text -> fixColor(text, placeholders))
                 .collect(Collectors.toList());
     }
 
