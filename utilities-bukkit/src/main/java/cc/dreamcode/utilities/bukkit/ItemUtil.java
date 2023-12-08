@@ -8,10 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class ItemUtil {
@@ -64,5 +66,14 @@ public class ItemUtil {
         return itemStacks.stream()
                 .map(itemStack -> newInv.addItem(itemStack).values())
                 .allMatch(Collection::isEmpty);
+    }
+
+    /**
+     * @return If returned list is empty - player has no items with this item param.
+     */
+    public static List<ItemStack> hasItem(@NonNull Inventory inventory, @NonNull ItemStack itemStack) {
+        return Arrays.stream(inventory.getContents())
+                .filter(scan -> scan.isSimilar(itemStack))
+                .collect(Collectors.toList());
     }
 }
