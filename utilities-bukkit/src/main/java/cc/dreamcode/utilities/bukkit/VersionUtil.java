@@ -1,6 +1,5 @@
 package cc.dreamcode.utilities.bukkit;
 
-import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
@@ -8,7 +7,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
-public class BukkitReflectionUtil {
+public class VersionUtil {
 
     public static boolean isSupported(int version) {
         return getVersion().orElse(-1) >= version;

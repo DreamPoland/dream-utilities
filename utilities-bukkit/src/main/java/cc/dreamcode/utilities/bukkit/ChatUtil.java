@@ -88,7 +88,7 @@ public class ChatUtil {
             final String hex = matcher.group();
             final Color color = hexToRgb(hex);
 
-            if (BukkitReflectionUtil.isSupported(16)) {
+            if (VersionUtil.isSupported(16)) {
                 atomicText.set(atomicText.get().replace(hex, ChatColor.of(color) + ""));
             }
             else {
