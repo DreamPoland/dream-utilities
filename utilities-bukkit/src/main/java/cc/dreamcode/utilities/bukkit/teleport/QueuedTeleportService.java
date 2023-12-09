@@ -48,6 +48,7 @@ public class QueuedTeleportService {
             }
         }
 
+        queuedTeleport.getCountdownNotice().accept(humanEntity);
         this.queuedTeleportCache.apply(uuid, queuedTeleport);
     }
 
