@@ -1,4 +1,4 @@
-# dream-utilities
+# Dream-Utilities
 Java utilities library for easy developing.
 
 ```xml
