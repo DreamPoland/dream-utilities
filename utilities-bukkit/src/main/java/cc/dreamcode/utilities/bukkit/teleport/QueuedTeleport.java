@@ -7,6 +7,7 @@ import org.bukkit.entity.HumanEntity;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @Data
@@ -17,7 +18,7 @@ public class QueuedTeleport {
     private final Duration duration;
     private final boolean cancelOnMove;
 
-    private final Consumer<HumanEntity> countdownNotice;
+    private final BiConsumer<HumanEntity, Duration> countdownNotice;
     private final Consumer<HumanEntity> movedNotice;
     private final Consumer<HumanEntity> alreadyInAction;
     private final Consumer<HumanEntity> taskAfter;

@@ -40,7 +40,7 @@ public class QueuedTeleportService {
             if (this.queuedTeleportCache.isQueued(uuid)) {
                 final QueuedTeleport existingTeleport = this.queuedTeleportCache.get(uuid);
 
-                final Duration duration = queuedTeleport.getCountdown();
+                final Duration duration = existingTeleport.getCountdown();
                 if (!duration.isNegative()) {
                     existingTeleport.getAlreadyInAction().accept(humanEntity);
                     return;
@@ -48,7 +48,9 @@ public class QueuedTeleportService {
             }
         }
 
-        queuedTeleport.getCountdownNotice().accept(humanEntity);
+        final Duration duration = queuedTeleport.getCountdown();
+        queuedTeleport.getCountdownNotice().accept(humanEntity, duration);
+
         this.queuedTeleportCache.apply(uuid, queuedTeleport);
     }
 

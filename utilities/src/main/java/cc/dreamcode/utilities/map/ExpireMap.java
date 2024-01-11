@@ -1,14 +1,20 @@
 package cc.dreamcode.utilities.map;
 
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ExpireMap<K, V> implements Map<K, V> {
 
-    @Setter private Duration duration;
+    private final Duration duration;
+
     private final Map<K, V> map = new HashMap<>();
 
     public ExpireMap(@NonNull Duration duration) {

@@ -29,7 +29,7 @@ public class QueuedTeleportTask implements Runnable {
                 return;
             }
 
-            queuedTeleport.getCountdownNotice().accept(humanEntity);
+            queuedTeleport.getCountdownNotice().accept(humanEntity, duration);
         });
     }
 }
