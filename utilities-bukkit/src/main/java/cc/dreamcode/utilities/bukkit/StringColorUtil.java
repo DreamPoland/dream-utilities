@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @UtilityClass
-public class ChatUtil {
+public class StringColorUtil {
 
     private static final Pattern hexPattern = Pattern.compile("&#([0-9A-Fa-f]{6})");
     private static final Map<Color, ChatColor> COLORS = new MapBuilder<Color, ChatColor>()
@@ -49,7 +49,7 @@ public class ChatUtil {
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
         return stringList.stream()
-                .map(ChatUtil::fixColor)
+                .map(StringColorUtil::fixColor)
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +61,7 @@ public class ChatUtil {
 
     public static List<String> fixColor(@NonNull String... strings) {
         return Arrays.stream(strings)
-                .map(ChatUtil::fixColor)
+                .map(StringColorUtil::fixColor)
                 .collect(Collectors.toList());
     }
 

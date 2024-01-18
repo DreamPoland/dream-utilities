@@ -1,6 +1,5 @@
 package cc.dreamcode.utilities;
 
-import cc.dreamcode.utilities.builder.MapBuilder;
 import eu.okaeri.placeholders.context.PlaceholderContext;
 import eu.okaeri.placeholders.message.CompiledMessage;
 import lombok.NonNull;
@@ -44,9 +43,12 @@ public class StringUtil {
     }
 
     public static String replace(@NonNull String text, @NonNull String from, @NonNull String to) {
-        return replace(text, new MapBuilder<String, Object>()
-                .put(from, to)
-                .build());
+        final CompiledMessage compiledMessage = CompiledMessage.of(text);
+        final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
+
+        placeholderContext.with(from, to);
+
+        return placeholderContext.apply();
     }
     
     public static String replace(@NonNull String text, @NonNull Map<String, Object> placeholders) {

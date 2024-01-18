@@ -1,9 +1,7 @@
 package cc.dreamcode.utilities.bukkit.builder;
 
 import cc.dreamcode.utilities.builder.ListBuilder;
-import cc.dreamcode.utilities.bukkit.ChatUtil;
-import eu.okaeri.placeholders.context.PlaceholderContext;
-import eu.okaeri.placeholders.message.CompiledMessage;
+import cc.dreamcode.utilities.bukkit.StringColorUtil;
 import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -151,13 +149,13 @@ public class ItemBuilder {
         assert itemMeta != null;
 
         if (itemMeta.hasDisplayName()) {
-            itemMeta.setDisplayName(ChatUtil.fixColor(itemMeta.getDisplayName()));
+            itemMeta.setDisplayName(StringColorUtil.fixColor(itemMeta.getDisplayName()));
         }
 
         if (itemMeta.hasLore()) {
             itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
                     .stream()
-                    .map(ChatUtil::fixColor)
+                    .map(StringColorUtil::fixColor)
                     .collect(Collectors.toList()));
         }
 
@@ -170,21 +168,15 @@ public class ItemBuilder {
         assert itemMeta != null;
 
         if (itemMeta.hasDisplayName()) {
-            final CompiledMessage compiledMessage = CompiledMessage.of(itemMeta.getDisplayName());
-            final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
+            final String compiledMessage = StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders);
 
-            itemMeta.setDisplayName(ChatUtil.fixColor(placeholderContext.with(placeholders).apply()));
+            itemMeta.setDisplayName(compiledMessage);
         }
 
         if (itemMeta.hasLore()) {
             itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
                     .stream()
-                    .map(text -> {
-                        final CompiledMessage compiledMessage = CompiledMessage.of(text);
-                        final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
-
-                        return ChatUtil.fixColor(placeholderContext.with(placeholders).apply());
-                    })
+                    .map(text -> StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders))
                     .collect(Collectors.toList()));
         }
 
