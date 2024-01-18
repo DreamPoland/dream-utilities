@@ -8,8 +8,6 @@ import lombok.experimental.UtilityClass;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @UtilityClass
 public class StringUtil {
@@ -66,7 +64,7 @@ public class StringUtil {
         final int leftLimit = 97;
         final int rightLimit = 122;
         return random.ints(leftLimit, rightLimit + 1)
-                .limit(leftLimit)
+                .limit(length)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
     }
@@ -78,18 +76,8 @@ public class StringUtil {
         final int rightLimit = 122;
         return random.ints(leftLimit, rightLimit + 1)
                 .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(leftLimit)
+                .limit(length)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
-    }
-
-    public static String generateJoiningNumbers(int to) {
-        return generateJoiningNumbers(1, to);
-    }
-
-    public static String generateJoiningNumbers(int from, int to) {
-        return IntStream.rangeClosed(from, to + 1)
-                .mapToObj(String::valueOf)
-                .collect(Collectors.joining(", "));
     }
 }
