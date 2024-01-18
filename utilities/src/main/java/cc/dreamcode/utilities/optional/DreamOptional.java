@@ -1,4 +1,4 @@
-package cc.dreamcode.utilities.stream;
+package cc.dreamcode.utilities.optional;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
