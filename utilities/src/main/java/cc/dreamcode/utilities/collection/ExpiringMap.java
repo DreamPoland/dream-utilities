@@ -1,6 +1,7 @@
-package cc.dreamcode.utilities.map;
+package cc.dreamcode.utilities.collection;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -11,15 +12,13 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ExpireMap<K, V> implements Map<K, V> {
+@RequiredArgsConstructor
+public class ExpiringMap<K, V> implements Map<K, V> {
 
     private final Duration duration;
 
+    private final Timer timer = new Timer();
     private final Map<K, V> map = new HashMap<>();
-
-    public ExpireMap(@NonNull Duration duration) {
-        this.duration = duration;
-    }
 
     @Override
     public int size() {
@@ -54,7 +53,7 @@ public class ExpireMap<K, V> implements Map<K, V> {
     public V put(@NonNull K key, @NonNull V value) {
         this.map.put(key, value);
 
-        new Timer().schedule(new TimerTask() {
+        this.timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 remove(key);
@@ -92,5 +91,12 @@ public class ExpireMap<K, V> implements Map<K, V> {
     @Override
     public Set<Entry<K, V>> entrySet() {
         return this.map.entrySet();
+    }
+
+    /**
+     * @return The number of tasks removed.
+     */
+    public int purge() {
+        return this.timer.purge();
     }
 }
