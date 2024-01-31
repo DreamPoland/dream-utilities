@@ -176,7 +176,7 @@ public class ItemBuilder {
         if (itemMeta.hasLore()) {
             itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
                     .stream()
-                    .map(text -> StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders))
+                    .map(text -> StringColorUtil.fixColor(text, placeholders))
                     .collect(Collectors.toList()));
         }
 
