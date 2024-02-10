@@ -43,7 +43,7 @@ public class DateUtil {
     }
 
     public static String formatOnlyTime(@NonNull Instant instant, @NonNull ZoneId zoneId) {
-        return formatOnlyDate(instant, zoneId, "HH:mm:ss");
+        return formatOnlyTime(instant, zoneId, "HH:mm:ss");
     }
 
     public static String formatOnlyTime(@NonNull Instant instant, @NonNull ZoneId zoneId, @NonNull String pattern) {
