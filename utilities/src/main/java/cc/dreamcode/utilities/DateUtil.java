@@ -15,8 +15,12 @@ public class DateUtil {
     }
 
     public static String format(@NonNull Instant instant, @NonNull ZoneId zoneId) {
+        return format(instant, zoneId, "yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String format(@NonNull Instant instant, @NonNull ZoneId zoneId, @NonNull String pattern) {
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return zonedDateTime.format(formatter);
     }
 
@@ -25,8 +29,12 @@ public class DateUtil {
     }
 
     public static String formatOnlyDate(@NonNull Instant instant, @NonNull ZoneId zoneId) {
+        return formatOnlyDate(instant, zoneId, "yyyy-MM-dd");
+    }
+
+    public static String formatOnlyDate(@NonNull Instant instant, @NonNull ZoneId zoneId, @NonNull String pattern) {
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return zonedDateTime.format(formatter);
     }
 
@@ -35,8 +43,12 @@ public class DateUtil {
     }
 
     public static String formatOnlyTime(@NonNull Instant instant, @NonNull ZoneId zoneId) {
+        return formatOnlyDate(instant, zoneId, "HH:mm:ss");
+    }
+
+    public static String formatOnlyTime(@NonNull Instant instant, @NonNull ZoneId zoneId, @NonNull String pattern) {
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return zonedDateTime.format(formatter);
     }
 }
