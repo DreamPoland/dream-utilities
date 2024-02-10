@@ -19,7 +19,10 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class StringColorUtil {
 
-    private static final Pattern hexPattern = Pattern.compile("&#([0-9A-Fa-f]{6})");
+    private static final char COLOR_CHAR = '\u00A7';
+    private static final char ALT_COLOR_CHAR = '&';
+
+    private static final Pattern hexPattern = Pattern.compile(ALT_COLOR_CHAR + "#([0-9A-Fa-f]{6})");
     private static final Map<Color, ChatColor> COLORS = new MapBuilder<Color, ChatColor>()
             .put(new Color(0), ChatColor.getByChar('0'))
             .put(new Color(170), ChatColor.getByChar('1'))
@@ -40,7 +43,7 @@ public class StringColorUtil {
             .build();
 
     public static String fixColor(@NonNull String text) {
-        return ChatColor.translateAlternateColorCodes('&', processRgb(text));
+        return ChatColor.translateAlternateColorCodes(ALT_COLOR_CHAR, processRgb(text));
     }
 
     public static String fixColor(@NonNull String text, @NonNull Map<String, Object> placeholders) {
@@ -62,6 +65,22 @@ public class StringColorUtil {
     public static List<String> fixColor(@NonNull String... strings) {
         return Arrays.stream(strings)
                 .map(StringColorUtil::fixColor)
+                .collect(Collectors.toList());
+    }
+
+    public static String breakColor(@NonNull String text) {
+        return text.replace(COLOR_CHAR + "", ALT_COLOR_CHAR + "");
+    }
+
+    public static List<String> breakColor(@NonNull List<String> stringList) {
+        return stringList.stream()
+                .map(StringColorUtil::breakColor)
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> breakColor(@NonNull String... strings) {
+        return Arrays.stream(strings)
+                .map(StringColorUtil::breakColor)
                 .collect(Collectors.toList());
     }
 

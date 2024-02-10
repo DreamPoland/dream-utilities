@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ItemBuilder {
+
     private final ItemStack itemStack;
 
     public ItemBuilder(@NonNull Material material) {
@@ -177,6 +178,25 @@ public class ItemBuilder {
             itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
                     .stream()
                     .map(text -> StringColorUtil.fixColor(text, placeholders))
+                    .collect(Collectors.toList()));
+        }
+
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public ItemBuilder breakColors() {
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        assert itemMeta != null;
+
+        if (itemMeta.hasDisplayName()) {
+            itemMeta.setDisplayName(StringColorUtil.breakColor(itemMeta.getDisplayName()));
+        }
+
+        if (itemMeta.hasLore()) {
+            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+                    .stream()
+                    .map(StringColorUtil::breakColor)
                     .collect(Collectors.toList()));
         }
 
