@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 @UtilityClass
 public class TimeUtil {
+
     public static String convertSeconds(long seconds) {
         long days = TimeUnit.SECONDS.toDays(seconds);
         long hours = TimeUnit.SECONDS.toHours(seconds) - (days * 24);

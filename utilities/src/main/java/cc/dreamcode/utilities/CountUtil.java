@@ -8,6 +8,7 @@ import java.time.Instant;
 
 @UtilityClass
 public class CountUtil {
+
     public static Duration getCountDown(long startEpochMilli, long timeInMills) {
         return Duration.ofMillis(startEpochMilli + timeInMills - Instant.now().toEpochMilli());
     }

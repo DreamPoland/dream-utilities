@@ -9,9 +9,6 @@ dependencies {
     // -- bungee api -- (core)
     compileOnly 'net.md-5:bungeecord-api:1.20-R0.1-SNAPSHOT'
 
-    // -- placeholders --
-    implementation 'eu.okaeri:okaeri-placeholders-core:4.0.7'
-
     // -- lombok --
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'

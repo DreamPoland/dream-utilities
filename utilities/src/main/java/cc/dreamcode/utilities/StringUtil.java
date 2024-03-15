@@ -1,16 +1,18 @@
 package cc.dreamcode.utilities;
 
-import eu.okaeri.placeholders.context.PlaceholderContext;
+import eu.okaeri.placeholders.Placeholders;
 import eu.okaeri.placeholders.message.CompiledMessage;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 @UtilityClass
 public class StringUtil {
+
+    private static Placeholders placeholders = Placeholders.create(true);
+
     public static String join(List<String> stringList) {
         return join(stringList.toArray(new String[0]), "", 0, stringList.size());
     }
@@ -42,42 +44,25 @@ public class StringUtil {
 
     public static String replace(@NonNull String text, @NonNull String from, @NonNull String to) {
         final CompiledMessage compiledMessage = CompiledMessage.of(text);
-        final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
-        placeholderContext.with(from, to);
-
-        return placeholderContext.apply();
+        return StringUtil.placeholders.contextOf(compiledMessage)
+                .with(from, to)
+                .apply();
     }
-    
+
     public static String replace(@NonNull String text, @NonNull Map<String, Object> placeholders) {
         final CompiledMessage compiledMessage = CompiledMessage.of(text);
-        final PlaceholderContext placeholderContext = PlaceholderContext.of(compiledMessage);
 
-        placeholderContext.with(placeholders);
-
-        return placeholderContext.apply();
+        return StringUtil.placeholders.contextOf(compiledMessage)
+                .with(placeholders)
+                .apply();
     }
 
-    public static String generateAlphabetic(int length) {
-        final Random random = new Random();
-
-        final int leftLimit = 97;
-        final int rightLimit = 122;
-        return random.ints(leftLimit, rightLimit + 1)
-                .limit(length)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+    public static Placeholders getPlaceholders() {
+        return StringUtil.placeholders;
     }
 
-    public static String generateAlphanumeric(int length) {
-        final Random random = new Random();
-
-        final int leftLimit = 48;
-        final int rightLimit = 122;
-        return random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(length)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+    public static void setPlaceholders(@NonNull Placeholders placeholders) {
+        StringUtil.placeholders = placeholders;
     }
 }

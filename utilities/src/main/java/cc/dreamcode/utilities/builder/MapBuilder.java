@@ -1,5 +1,6 @@
 package cc.dreamcode.utilities.builder;
 
+import cc.dreamcode.utilities.collection.DreamMap;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -116,4 +117,7 @@ public class MapBuilder<K, V> {
         return this.map;
     }
 
+    public DreamMap<K, V> buildDream() {
+        return (DreamMap<K, V>) this.map;
+    }
 }

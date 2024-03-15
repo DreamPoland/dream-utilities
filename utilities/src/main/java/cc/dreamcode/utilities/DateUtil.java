@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 @UtilityClass
 public class DateUtil {
+
     public static String format(@NonNull Instant instant) {
         return format(instant, ZoneId.of("Poland"));
     }
