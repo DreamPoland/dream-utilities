@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @UtilityClass
@@ -42,21 +43,31 @@ public class StringUtil {
         return stringBuilder.toString();
     }
 
-    public static String replace(@NonNull String text, @NonNull String from, @NonNull String to) {
-        final CompiledMessage compiledMessage = CompiledMessage.of(text);
+    public static String replace(@NonNull String text, @NonNull String from, @NonNull Object to) {
+        return StringUtil.replace(Locale.forLanguageTag("pl"), text, from, to);
+    }
+
+    public static String replace(@NonNull Locale locale, @NonNull String text, @NonNull String from, @NonNull Object to) {
+        final CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
 
         return StringUtil.placeholders.contextOf(compiledMessage)
                 .with(from, to)
                 .apply();
     }
 
+
     public static String replace(@NonNull String text, @NonNull Map<String, Object> placeholders) {
-        final CompiledMessage compiledMessage = CompiledMessage.of(text);
+        return StringUtil.replace(Locale.forLanguageTag("pl"), text, placeholders);
+    }
+
+    public static String replace(@NonNull Locale locale, @NonNull String text, @NonNull Map<String, Object> placeholders) {
+        final CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
 
         return StringUtil.placeholders.contextOf(compiledMessage)
                 .with(placeholders)
                 .apply();
     }
+
 
     public static Placeholders getPlaceholders() {
         return StringUtil.placeholders;
