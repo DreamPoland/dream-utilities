@@ -1,5 +1,6 @@
 package cc.dreamcode.utilities.bukkit;
 
+import cc.dreamcode.utilities.ClassUtil;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
@@ -11,6 +12,15 @@ public class VersionUtil {
 
     public static boolean isSupported(int version) {
         return getVersion().orElse(-1) >= version;
+    }
+
+    public static boolean isSpigot() {
+        return ClassUtil.hasClass("org.spigotmc.SpigotConfig");
+    }
+
+    public static boolean isPaper() {
+        return ClassUtil.hasClass("com.destroystokyo.paper.PaperConfig") ||
+                ClassUtil.hasClass("io.papermc.paper.configuration.Configuration");
     }
 
     public static Optional<String> getStringVersion() {
