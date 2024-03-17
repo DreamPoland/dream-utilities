@@ -1,4 +1,4 @@
-package cc.dreamcode.utilities.optional;
+package cc.dreamcode.utilities.option;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -12,38 +12,38 @@ import java.util.stream.Stream;
 
 @EqualsAndHashCode
 @ToString
-public final class DreamOptional<V> {
+public final class Option<V> {
 
     private final V value;
 
-    public DreamOptional() {
+    public Option() {
         this.value = null;
     }
 
-    public DreamOptional(@NonNull V value) {
+    public Option(@NonNull V value) {
         this.value = value;
     }
 
     @SuppressWarnings({ "OptionalUsedAsFieldOrParameterType" })
-    public DreamOptional(@NonNull Optional<V> optionalValue) {
+    public Option(@NonNull Optional<V> optionalValue) {
         this.value = optionalValue.orElse(null);
     }
 
-    public static <T> DreamOptional<T> empty() {
-        return new DreamOptional<>();
+    public static <T> Option<T> empty() {
+        return new Option<>();
     }
 
-    public static <T> DreamOptional<T> of(@NonNull T value) {
-        return new DreamOptional<>(value);
+    public static <T> Option<T> of(@NonNull T value) {
+        return new Option<>(value);
     }
 
-    public static <T> DreamOptional<T> ofNullable(T value) {
+    public static <T> Option<T> ofNullable(T value) {
         return value == null ? empty() : of(value);
     }
 
     @SuppressWarnings({ "OptionalUsedAsFieldOrParameterType" })
-    public static <T> DreamOptional<T> ofOptional(@NonNull Optional<T> optionalValue) {
-        return new DreamOptional<>(optionalValue);
+    public static <T> Option<T> ofOptional(@NonNull Optional<T> optionalValue) {
+        return new Option<>(optionalValue);
     }
 
     public boolean isPresent() {
@@ -86,7 +86,7 @@ public final class DreamOptional<V> {
         throw supplier.get();
     }
 
-    public DreamOptional<V> accept(@NonNull Consumer<? super V> consumer) {
+    public Option<V> accept(@NonNull Consumer<? super V> consumer) {
         if (this.isEmpty()) {
             return this;
         }
@@ -95,7 +95,7 @@ public final class DreamOptional<V> {
         return this;
     }
 
-    public DreamOptional<V> acceptOrElse(@NonNull Consumer<? super V> consumer, @NonNull Runnable runnable) {
+    public Option<V> acceptOrElse(@NonNull Consumer<? super V> consumer, @NonNull Runnable runnable) {
         if (this.isEmpty()) {
             runnable.run();
             return this;
