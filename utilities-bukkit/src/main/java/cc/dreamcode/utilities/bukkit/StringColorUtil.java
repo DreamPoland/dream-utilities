@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
@@ -48,6 +49,10 @@ public class StringColorUtil {
 
     public static String fixColor(@NonNull String text, @NonNull Map<String, Object> placeholders) {
         return fixColor(StringUtil.replace(text, placeholders));
+    }
+
+    public static String fixColor(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
+        return fixColor(StringUtil.replace(locale, text, placeholders));
     }
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
