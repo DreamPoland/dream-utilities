@@ -2,17 +2,20 @@ package cc.dreamcode.utilities.bukkit.builder;
 
 import cc.dreamcode.utilities.builder.ListBuilder;
 import cc.dreamcode.utilities.bukkit.StringColorUtil;
+import cc.dreamcode.utilities.bukkit.VersionUtil;
 import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ItemBuilder {
@@ -27,8 +30,13 @@ public class ItemBuilder {
         this.itemStack = new ItemStack(material, amount);
     }
 
-    public ItemBuilder(@NonNull ItemStack itemStack) {
-        this.itemStack = new ItemStack(itemStack);
+    public ItemBuilder(@NonNull ItemStack itemStack, boolean clone) {
+        if (clone) {
+            this.itemStack = new ItemStack(itemStack);
+        }
+        else {
+            this.itemStack = itemStack;
+        }
     }
 
     public static ItemBuilder of(@NonNull Material material) {
@@ -40,7 +48,11 @@ public class ItemBuilder {
     }
 
     public static ItemBuilder of(@NonNull ItemStack itemStack) {
-        return new ItemBuilder(itemStack);
+        return new ItemBuilder(itemStack, true);
+    }
+
+    public static ItemBuilder manipulate(@NonNull ItemStack itemStack) {
+        return new ItemBuilder(itemStack, false);
     }
 
     public ItemBuilder setAmount(int amount) {
@@ -53,7 +65,27 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder withDurability(int durability) {
+
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        if (VersionUtil.isSupported(13) && itemMeta instanceof Damageable) {
+            Damageable damageable = (Damageable) itemMeta;
+
+            if (damageable.hasDamage()) {
+                damageable.setDamage(durability);
+            }
+
+            this.itemStack.setItemMeta(itemMeta);
+        }
+        else {
+            this.itemStack.setDurability((short) durability);
+        }
+
+        return this;
+    }
+
     public ItemBuilder setName(@NonNull String name) {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -64,6 +96,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder startLoreWith(@NonNull List<String> lore) {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -85,7 +118,8 @@ public class ItemBuilder {
         return this.startLoreWith(Arrays.asList(lore));
     }
 
-    public ItemBuilder endLoreWith(@NonNull List<String> lore) {
+    public ItemBuilder appendLore(@NonNull List<String> lore) {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -103,11 +137,12 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder endLoreWith(@NonNull String... lore) {
-        return this.endLoreWith(Arrays.asList(lore));
+    public ItemBuilder appendLore(@NonNull String... lore) {
+        return this.appendLore(Arrays.asList(lore));
     }
 
     public ItemBuilder setLore(@NonNull List<String> lore) {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -122,6 +157,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addEnchant(@NonNull Enchantment enchantment, int level, boolean ignoreLevelRestriction) {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -136,6 +172,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addFlags(@NonNull ItemFlag... itemFlag) {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -146,6 +183,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder fixColors() {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -165,6 +203,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder fixColors(@NonNull Map<String, Object> placeholders) {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -186,6 +225,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder breakColors() {
+
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
@@ -201,6 +241,16 @@ public class ItemBuilder {
         }
 
         this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public ItemBuilder withCustomMeta(@NonNull Function<ItemMeta, ItemMeta> function) {
+
+        if (this.itemStack.hasItemMeta()) {
+            final ItemMeta itemMeta = this.itemStack.getItemMeta();
+            this.itemStack.setItemMeta(function.apply(itemMeta));
+        }
+
         return this;
     }
 
