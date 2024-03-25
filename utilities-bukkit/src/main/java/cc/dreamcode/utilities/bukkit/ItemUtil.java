@@ -1,5 +1,6 @@
 package cc.dreamcode.utilities.bukkit;
 
+import cc.dreamcode.utilities.bukkit.builder.ItemBuilder;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
@@ -75,5 +76,17 @@ public class ItemUtil {
         return Arrays.stream(inventory.getContents())
                 .filter(scan -> scan.isSimilar(itemStack))
                 .collect(Collectors.toList());
+    }
+
+    public static int countItems(@NonNull Inventory inventory, @NonNull ItemStack itemStack) {
+        return Arrays.stream(inventory.getContents())
+                .filter(Objects::nonNull)
+                .filter(scan -> scan.isSimilar(itemStack))
+                .mapToInt(ItemStack::getAmount)
+                .sum();
+    }
+
+    public static int countColorizedItems(@NonNull Inventory inventory, @NonNull ItemStack itemStack) {
+        return ItemUtil.countItems(inventory, ItemBuilder.of(itemStack).fixColors().toItemStack());
     }
 }
