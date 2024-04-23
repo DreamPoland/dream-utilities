@@ -1,10 +1,12 @@
 package cc.dreamcode.utilities;
 
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+@UtilityClass
 public class TicksUtil {
 
     public static final int SECOND = 20;
