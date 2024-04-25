@@ -11,7 +11,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class ItemNbtNewer implements ItemNbt {
@@ -38,14 +37,23 @@ public class ItemNbtNewer implements ItemNbt {
     }
 
     @Override
-    public Optional<String> getValue(@NonNull Plugin plugin, @NonNull ItemStack itemStack, @NonNull String key) {
+    public Map<String, String> getValues(@NonNull ItemStack itemStack) {
+
+        final MapBuilder<String, String> mapBuilder = new MapBuilder<>();
 
         final ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
-            return Optional.empty();
+            return mapBuilder.build();
         }
 
-        return Optional.ofNullable(itemMeta.getPersistentDataContainer().get(new NamespacedKey(plugin, key), PersistentDataType.STRING));
+        itemMeta.getPersistentDataContainer()
+                .getKeys()
+                .forEach(namespacedKey -> mapBuilder.put(
+                        namespacedKey.getKey(),
+                        itemMeta.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING)
+                ));
+
+        return mapBuilder.build();
     }
 
     @Override

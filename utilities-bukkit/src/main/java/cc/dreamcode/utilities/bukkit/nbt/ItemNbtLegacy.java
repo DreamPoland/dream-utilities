@@ -59,9 +59,14 @@ public class ItemNbtLegacy implements ItemNbt {
     }
 
     @Override
+    public Map<String, String> getValues(@NonNull Plugin plugin, @NonNull ItemStack itemStack) {
+        return this.getValues(itemStack);
+    }
+
+    @Override
     @SneakyThrows
     @SuppressWarnings("unchecked")
-    public Map<String, String> getValues(@NonNull Plugin plugin, @NonNull ItemStack itemStack) {
+    public Map<String, String> getValues(@NonNull ItemStack itemStack) {
 
         final Object nmsCopy = this.asNMSCopyMethod.invoke(null, itemStack);
         final Object itemCompound = this.getItemCompound(nmsCopy);
@@ -75,23 +80,6 @@ public class ItemNbtLegacy implements ItemNbt {
         }
 
         return mapBuilder.build();
-    }
-
-    @Override
-    @SneakyThrows
-    public Optional<String> getValue(@NonNull Plugin plugin, @NonNull ItemStack itemStack, @NonNull String key) {
-
-        final Object nmsCopy = this.asNMSCopyMethod.invoke(null, itemStack);
-        final Object itemCompound = this.getItemCompound(nmsCopy);
-
-        return Optional.ofNullable((String) this.getItemStringMethod.invoke(itemCompound, key))
-                .map(text -> {
-                    if (text.isEmpty()) {
-                        return null;
-                    }
-
-                    return text;
-                });
     }
 
     @Override
