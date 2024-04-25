@@ -1,6 +1,7 @@
 package cc.dreamcode.utilities.bukkit.nbt;
 
 import cc.dreamcode.utilities.ClassUtil;
+import cc.dreamcode.utilities.builder.MapBuilder;
 import cc.dreamcode.utilities.bukkit.VersionUtil;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -9,7 +10,9 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class ItemNbtLegacy implements ItemNbt {
 
@@ -19,6 +22,7 @@ public class ItemNbtLegacy implements ItemNbt {
     private final Method hasItemTagMethod;
     private final Method getItemTagMethod;
     private final Method setItemTagMethod;
+    private final Method getItemKeySet;
     private final Method getItemStringMethod;
     private final Method setItemStringMethod;
 
@@ -43,6 +47,7 @@ public class ItemNbtLegacy implements ItemNbt {
             this.getItemTagMethod = itemStackClass.getMethod("getTag");
             this.setItemTagMethod = itemStackClass.getMethod("setTag", nbtTagCompoundClass);
 
+            this.getItemKeySet = nbtTagCompoundClass.getMethod("c");
             this.getItemStringMethod = nbtTagCompoundClass.getMethod("getString", String.class);
             this.setItemStringMethod = nbtTagCompoundClass.getMethod("setString", String.class, String.class);
 
@@ -55,12 +60,38 @@ public class ItemNbtLegacy implements ItemNbt {
 
     @Override
     @SneakyThrows
+    @SuppressWarnings("unchecked")
+    public Map<String, String> getValues(@NonNull Plugin plugin, @NonNull ItemStack itemStack) {
+
+        final Object nmsCopy = this.asNMSCopyMethod.invoke(null, itemStack);
+        final Object itemCompound = this.getItemCompound(nmsCopy);
+
+        final Set<String> keys = (Set<String>) this.getItemKeySet.invoke(itemCompound);
+        final MapBuilder<String, String> mapBuilder = new MapBuilder<>();
+
+        for (String key : keys) {
+            Optional.ofNullable((String) this.getItemStringMethod.invoke(itemCompound, key))
+                    .ifPresent(s -> mapBuilder.put(key, s));
+        }
+
+        return mapBuilder.build();
+    }
+
+    @Override
+    @SneakyThrows
     public Optional<String> getValue(@NonNull Plugin plugin, @NonNull ItemStack itemStack, @NonNull String key) {
 
         final Object nmsCopy = this.asNMSCopyMethod.invoke(null, itemStack);
         final Object itemCompound = this.getItemCompound(nmsCopy);
 
-        return Optional.ofNullable((String) this.getItemStringMethod.invoke(itemCompound, key));
+        return Optional.ofNullable((String) this.getItemStringMethod.invoke(itemCompound, key))
+                .map(text -> {
+                    if (text.isEmpty()) {
+                        return null;
+                    }
+
+                    return text;
+                });
     }
 
     @Override

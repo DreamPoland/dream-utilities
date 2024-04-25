@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Map;
 import java.util.Optional;
 
 @UtilityClass
@@ -18,6 +19,14 @@ public class ItemNbtUtil {
         ITEM_NBT = VersionUtil.isSupported(14)
                 ? new ItemNbtNewer()
                 : new ItemNbtLegacy();
+    }
+
+    public static Map<String, String> getValues(@NonNull Plugin plugin, @NonNull ItemStack itemStack) {
+        return ITEM_NBT.getValues(plugin, itemStack);
+    }
+
+    public static Map<String, String> getValues(@NonNull ItemStack itemStack) {
+        return ITEM_NBT.getValues(ItemNbtUtil.plugin, itemStack);
     }
 
     public static Optional<String> getValue(@NonNull Plugin plugin, @NonNull ItemStack itemStack, @NonNull String key) {

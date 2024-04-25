@@ -1,5 +1,6 @@
 package cc.dreamcode.utilities.bukkit.nbt;
 
+import cc.dreamcode.utilities.builder.MapBuilder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.NamespacedKey;
@@ -8,32 +9,53 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 public class ItemNbtNewer implements ItemNbt {
 
     @Override
+    public Map<String, String> getValues(@NonNull Plugin plugin, @NonNull ItemStack itemStack) {
+
+        final MapBuilder<String, String> mapBuilder = new MapBuilder<>();
+
+        final ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) {
+            return mapBuilder.build();
+        }
+
+        itemMeta.getPersistentDataContainer().getKeys()
+                .stream()
+                .filter(namespacedKey -> namespacedKey.getNamespace().equals(plugin.getName().toLowerCase(Locale.ROOT)))
+                .forEach(namespacedKey -> mapBuilder.put(
+                        namespacedKey.getKey(),
+                        itemMeta.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING)
+                ));
+
+        return mapBuilder.build();
+    }
+
+    @Override
     public Optional<String> getValue(@NonNull Plugin plugin, @NonNull ItemStack itemStack, @NonNull String key) {
-        if (itemStack.hasItemMeta()) {
+
+        final ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) {
             return Optional.empty();
         }
 
-        final ItemMeta itemMeta = itemStack.getItemMeta();
-
-        assert itemMeta != null;
         return Optional.ofNullable(itemMeta.getPersistentDataContainer().get(new NamespacedKey(plugin, key), PersistentDataType.STRING));
     }
 
     @Override
     public ItemStack setValue(@NonNull Plugin plugin, @NonNull ItemStack itemStack, @NonNull String key, @NonNull String value) {
-        if (itemStack.hasItemMeta()) {
+
+        final ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) {
             return itemStack;
         }
 
-        final ItemMeta itemMeta = itemStack.getItemMeta();
-
-        assert itemMeta != null;
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, key), PersistentDataType.STRING, value);
 
         itemStack.setItemMeta(itemMeta);
