@@ -1,6 +1,6 @@
 package cc.dreamcode.utilities.bukkit.teleport;
 
-import cc.dreamcode.utilities.CountUtil;
+import cc.dreamcode.utilities.MathUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.HumanEntity;
@@ -24,7 +24,7 @@ public class QueuedTeleport {
     private final Consumer<HumanEntity> taskAfter;
 
     public Duration getCountdown() {
-        return CountUtil.getCountDown(this.instant, this.duration);
+        return MathUtil.difference(this.instant, this.duration);
     }
 
 }

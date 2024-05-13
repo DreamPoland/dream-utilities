@@ -3,6 +3,7 @@ package cc.dreamcode.utilities.bukkit.builder;
 import cc.dreamcode.utilities.builder.ListBuilder;
 import cc.dreamcode.utilities.bukkit.StringColorUtil;
 import cc.dreamcode.utilities.bukkit.VersionUtil;
+import cc.dreamcode.utilities.bukkit.nbt.ItemNbtUtil;
 import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class ItemBuilder {
 
-    private final ItemStack itemStack;
+    private ItemStack itemStack;
 
     public ItemBuilder(@NonNull Material material) {
         this.itemStack = new ItemStack(material);
@@ -251,6 +252,11 @@ public class ItemBuilder {
             this.itemStack.setItemMeta(function.apply(itemMeta));
         }
 
+        return this;
+    }
+
+    public ItemBuilder withNbt(@NonNull String key, @NonNull String value) {
+        this.itemStack = ItemNbtUtil.setValue(this.itemStack, key, value);
         return this;
     }
 

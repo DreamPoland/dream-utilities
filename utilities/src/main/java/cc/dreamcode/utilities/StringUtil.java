@@ -68,7 +68,6 @@ public class StringUtil {
                 .apply();
     }
 
-
     public static Placeholders getPlaceholders() {
         return StringUtil.placeholders;
     }
