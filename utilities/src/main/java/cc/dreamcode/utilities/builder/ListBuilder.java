@@ -1,6 +1,5 @@
 package cc.dreamcode.utilities.builder;
 
-import cc.dreamcode.utilities.collection.DreamList;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -37,9 +36,5 @@ public class ListBuilder<T> {
 
     public List<T> build() {
         return this.list;
-    }
-
-    public DreamList<T> buildDream() {
-        return (DreamList<T>) this.list;
     }
 }
