@@ -16,15 +16,15 @@ public class Validation {
         consumer.accept(t);
     }
 
-    public static <T> void isNull(T t, @NonNull Runnable runnable) {
-        if (t != null) {
+    public static void isNull(Object ob, @NonNull Runnable runnable) {
+        if (ob != null) {
             return;
         }
 
         runnable.run();
     }
 
-    public static <T> void isTrue(boolean b, @NonNull Runnable runnable) {
+    public static void isTrue(boolean b, @NonNull Runnable runnable) {
         if (!b) {
             return;
         }
@@ -32,7 +32,7 @@ public class Validation {
         runnable.run();
     }
 
-    public static <T> void isFalse(boolean b, @NonNull Runnable runnable) {
+    public static void isFalse(boolean b, @NonNull Runnable runnable) {
         if (b) {
             return;
         }
