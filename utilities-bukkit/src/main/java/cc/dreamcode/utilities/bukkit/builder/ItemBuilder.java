@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -257,6 +258,11 @@ public class ItemBuilder {
 
     public ItemBuilder withNbt(@NonNull String key, @NonNull String value) {
         this.itemStack = ItemNbtUtil.setValue(this.itemStack, key, value);
+        return this;
+    }
+
+    public ItemBuilder withNbt(@NonNull Plugin plugin, @NonNull String key, @NonNull String value) {
+        this.itemStack = ItemNbtUtil.setValue(plugin, this.itemStack, key, value);
         return this;
     }
 

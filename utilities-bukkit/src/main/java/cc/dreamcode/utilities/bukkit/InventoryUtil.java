@@ -1,5 +1,6 @@
 package cc.dreamcode.utilities.bukkit;
 
+import cc.dreamcode.utilities.Validation;
 import cc.dreamcode.utilities.bukkit.builder.ItemBuilder;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -17,24 +18,28 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @UtilityClass
-public class ItemUtil {
+public class InventoryUtil {
 
     public static void giveItem(@NonNull Player player, @NonNull ItemStack itemStack) {
-        giveItems(player, player.getLocation(), Collections.singletonList(itemStack));
+        giveItems(player.getInventory(), player.getLocation(), Collections.singletonList(itemStack));
     }
 
     public static void giveItems(@NonNull Player player, @NonNull List<ItemStack> itemStacks) {
-        giveItems(player, player.getLocation(), itemStacks);
+        giveItems(player.getInventory(), player.getLocation(), itemStacks);
     }
 
     public static void giveItem(@NonNull Player player, @NonNull Location location, @NonNull ItemStack itemStack) {
-        giveItems(player, location, Collections.singletonList(itemStack));
+        giveItems(player.getInventory(), location, Collections.singletonList(itemStack));
     }
 
-    public static void giveItems(@NonNull Player player, @NonNull Location location, @NonNull List<ItemStack> itemStacks) {
+    public static void giveItem(@NonNull Inventory inventory, @NonNull Location location, @NonNull ItemStack itemStack) {
+        giveItems(inventory, location, Collections.singletonList(itemStack));
+    }
+
+    public static void giveItems(@NonNull Inventory inventory, @NonNull Location location, @NonNull List<ItemStack> itemStacks) {
         itemStacks.forEach(itemStack ->
-                player.getInventory().addItem(itemStack).values().forEach(noAdded ->
-                        location.getWorld().dropItem(location, noAdded)));
+                inventory.addItem(itemStack).values().forEach(noAdded ->
+                        Validation.nonNull(location.getWorld(), world -> world.dropItem(location, noAdded))));
     }
 
     public static void dropItem(@NonNull ItemStack itemStack, @NonNull Location location) {
@@ -87,6 +92,6 @@ public class ItemUtil {
     }
 
     public static int countColorizedItems(@NonNull Inventory inventory, @NonNull ItemStack itemStack) {
-        return ItemUtil.countItems(inventory, ItemBuilder.of(itemStack).fixColors().toItemStack());
+        return InventoryUtil.countItems(inventory, ItemBuilder.of(itemStack).fixColors().toItemStack());
     }
 }
