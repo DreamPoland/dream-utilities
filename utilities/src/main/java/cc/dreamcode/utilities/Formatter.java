@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 @UtilityClass
-public class FormatUtil {
+public class Formatter {
 
     public static String format(long mills) {
 
@@ -61,7 +61,7 @@ public class FormatUtil {
     }
 
     public static String format(@NonNull Duration duration) {
-        return FormatUtil.format(duration.toMillis());
+        return Formatter.format(duration.toMillis());
     }
 
     public static String formatSec(long seconds) {
@@ -87,7 +87,7 @@ public class FormatUtil {
     }
 
     public static String formatSec(@NonNull Duration duration) {
-        return FormatUtil.formatSec(duration.getSeconds());
+        return Formatter.formatSec(duration.getSeconds());
     }
 
     public static String format(@NonNull Instant instant) {
