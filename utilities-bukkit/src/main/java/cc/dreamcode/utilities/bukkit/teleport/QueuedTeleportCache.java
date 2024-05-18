@@ -3,13 +3,13 @@ package cc.dreamcode.utilities.bukkit.teleport;
 import lombok.NonNull;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.WeakHashMap;
 
 public class QueuedTeleportCache {
 
-    private final Map<UUID, QueuedTeleport> queuedTeleportMap = new HashMap<>();
+    private final Map<UUID, QueuedTeleport> queuedTeleportMap = new WeakHashMap<>();
 
     /**
      * Returns unmodifiable keys and values from cache.

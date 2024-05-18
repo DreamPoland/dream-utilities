@@ -24,9 +24,10 @@ public class QueuedTeleportController implements Listener {
             return;
         }
 
-        if (e.getFrom().getBlockX() != e.getTo().getBlockX() || e.getFrom().getBlockZ() != e.getTo().getBlockZ()) {
-            e.setCancelled(true);
+        if (e.getFrom().getBlockX() != e.getTo().getBlockX() ||
+                e.getFrom().getBlockZ() != e.getTo().getBlockZ()) {
             queuedTeleport.getMovedNotice().accept(player);
+            this.queuedTeleportCache.remove(player.getUniqueId());
         }
     }
 }
