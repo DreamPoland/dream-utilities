@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class SetBuilder<T> {
@@ -20,7 +21,8 @@ public class SetBuilder<T> {
     @SafeVarargs
     public static <T> Set<T> of(T... values) {
         return new SetBuilder<T>()
-                .addAll(Arrays.asList(values))
+                .addAll(Arrays.stream(values)
+                        .collect(Collectors.toSet()))
                 .build();
     }
 

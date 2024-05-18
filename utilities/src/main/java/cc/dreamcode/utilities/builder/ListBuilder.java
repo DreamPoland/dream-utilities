@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class ListBuilder<T> {
@@ -20,7 +21,8 @@ public class ListBuilder<T> {
     @SafeVarargs
     public static <T> List<T> of(T... values) {
         return new ListBuilder<T>()
-                .addAll(Arrays.asList(values))
+                .addAll(Arrays.stream(values)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
