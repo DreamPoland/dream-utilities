@@ -1,4 +1,6 @@
 # Dream-Utilities
+[![Build](https://github.com/DreamPoland/dream-utilities/actions/workflows/gradle.yml/badge.svg)](https://github.com/DreamPoland/dream-utilities/actions/workflows/gradle.yml)
+
 Java utilities library for easy developing.
 
 ```xml
