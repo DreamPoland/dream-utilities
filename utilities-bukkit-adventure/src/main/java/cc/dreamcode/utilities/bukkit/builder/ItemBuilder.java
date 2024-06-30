@@ -226,6 +226,48 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder legacyFixColors() {
+
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        assert itemMeta != null;
+
+        if (itemMeta.hasDisplayName()) {
+            itemMeta.setDisplayName(StringColorUtil.legacyFixColor(itemMeta.getDisplayName()));
+        }
+
+        if (itemMeta.hasLore()) {
+            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+                    .stream()
+                    .map(StringColorUtil::legacyFixColor)
+                    .collect(Collectors.toList()));
+        }
+
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public ItemBuilder legacyFixColors(@NonNull Map<String, Object> placeholders) {
+
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        assert itemMeta != null;
+
+        if (itemMeta.hasDisplayName()) {
+            final String compiledMessage = StringColorUtil.legacyFixColor(itemMeta.getDisplayName(), placeholders);
+
+            itemMeta.setDisplayName(compiledMessage);
+        }
+
+        if (itemMeta.hasLore()) {
+            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+                    .stream()
+                    .map(text -> StringColorUtil.legacyFixColor(text, placeholders))
+                    .collect(Collectors.toList()));
+        }
+
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
     public ItemBuilder breakColors() {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
