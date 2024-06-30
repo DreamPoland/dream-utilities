@@ -37,4 +37,8 @@ public class Entry<K, V> implements Map.Entry<K, V> {
         this.value = value;
         return value;
     }
+
+    public static <K, V> Entry<K, V> of(K key, V value) {
+        return new Entry<>(key, value);
+    }
 }

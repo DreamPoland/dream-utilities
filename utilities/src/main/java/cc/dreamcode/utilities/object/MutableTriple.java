@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.util.function.Consumer;
 
-@Data
+@Data(staticConstructor = "of")
 @AllArgsConstructor
 public class MutableTriple<A, B, C> {
 

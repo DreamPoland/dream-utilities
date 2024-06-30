@@ -1,10 +1,12 @@
 package cc.dreamcode.utilities.object;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
-@Data
+@Data(staticConstructor = "of")
+@RequiredArgsConstructor
 public class Duo<A, B> {
 
     private final A first;
