@@ -8,4 +8,7 @@ dependencies {
 
     // -- bungee api -- (base)
     compileOnly("net.md-5:bungeecord-api:1.20-R0.1-SNAPSHOT")
+
+    // -- placeholders --
+    implementation("eu.okaeri:okaeri-placeholders-core:5.0.1")
 }
