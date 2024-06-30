@@ -16,8 +16,8 @@ public class QueuedTeleportService {
         this.plugin = plugin;
         this.queuedTeleportCache = new QueuedTeleportCache();
 
-        QueuedTeleportTask queuedTeleportTask = new QueuedTeleportTask(plugin, this.queuedTeleportCache);
-        plugin.getServer().getScheduler().runTaskTimer(plugin, queuedTeleportTask, 0L, 20L);
+        QueuedTeleportScheduler queuedTeleportScheduler = new QueuedTeleportScheduler(plugin, this.queuedTeleportCache);
+        plugin.getServer().getScheduler().runTaskTimer(plugin, queuedTeleportScheduler, 0L, 2L);
 
         QueuedTeleportController queuedTeleportController = new QueuedTeleportController(this.queuedTeleportCache);
         plugin.getServer().getPluginManager().registerEvents(queuedTeleportController, plugin);
