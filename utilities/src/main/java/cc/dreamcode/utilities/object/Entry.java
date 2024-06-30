@@ -1,4 +1,4 @@
-package cc.dreamcode.utilities.collection.element;
+package cc.dreamcode.utilities.object;
 
 import java.util.Map;
 import java.util.function.Consumer;

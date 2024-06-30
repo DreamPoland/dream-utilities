@@ -86,7 +86,7 @@ public final class Option<V> {
         throw supplier.get();
     }
 
-    public Option<V> accept(@NonNull Consumer<? super V> consumer) {
+    public Option<V> ifPresent(@NonNull Consumer<? super V> consumer) {
         if (this.isEmpty()) {
             return this;
         }
@@ -95,7 +95,7 @@ public final class Option<V> {
         return this;
     }
 
-    public Option<V> acceptOrElse(@NonNull Consumer<? super V> consumer, @NonNull Runnable runnable) {
+    public Option<V> ifPresentOrElse(@NonNull Consumer<? super V> consumer, @NonNull Runnable runnable) {
         if (this.isEmpty()) {
             runnable.run();
             return this;

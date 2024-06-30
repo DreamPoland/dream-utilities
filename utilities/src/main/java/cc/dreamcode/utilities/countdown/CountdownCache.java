@@ -1,31 +1,33 @@
 package cc.dreamcode.utilities.countdown;
 
-import cc.dreamcode.utilities.collection.ExpiringMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.WeakHashMap;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class CountdownCache {
 
-    private final ExpiringMap<UUID, Countdown> map = new ExpiringMap<>((uuid, countdown) -> {
-        if (countdown.getRunnable() != null) {
-            countdown.getRunnable().run();
-        }
-    });
+    private final Map<UUID, Countdown> map = new WeakHashMap<>();
 
     public boolean isComplete(@NonNull UUID uuid) {
-        return this.map.getIfPresent(uuid)
-                .map(Countdown::isComplete)
+        return this.map.entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().equals(uuid))
+                .map(entry -> entry.getValue().isComplete())
+                .findAny()
                 .orElse(false);
     }
 
     public Optional<Countdown> getIfPresent(@NonNull UUID uuid) {
-        return this.map.getIfPresent(uuid);
+        return Optional.ofNullable(this.map.get(uuid));
     }
 
     public Countdown put(@NonNull UUID uuid, @NonNull Duration duration) {
@@ -48,5 +50,13 @@ public class CountdownCache {
         });
 
         this.map.remove(uuid);
+    }
+
+    // method can be used to remove unused countdown objects
+    public List<UUID> uuidToRemove() {
+        return this.map.keySet()
+                .stream()
+                .filter(this::isComplete)
+                .collect(Collectors.toList());
     }
 }

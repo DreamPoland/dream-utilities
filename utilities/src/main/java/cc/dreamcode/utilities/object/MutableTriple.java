@@ -1,4 +1,4 @@
-package cc.dreamcode.utilities.collection.element;
+package cc.dreamcode.utilities.object;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
