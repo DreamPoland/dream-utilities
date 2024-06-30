@@ -1,11 +1,14 @@
 package cc.dreamcode.utilities.bukkit;
 
 import cc.dreamcode.utilities.ClassUtil;
+import cc.dreamcode.utilities.ParseUtil;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 
-import java.util.Arrays;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
 public class VersionUtil {
@@ -23,35 +26,51 @@ public class VersionUtil {
                 ClassUtil.hasClass("io.papermc.paper.configuration.Configuration");
     }
 
+    /**
+     * WARNING: Not supporting 1.20.5+ - no nms version-package files.
+     * @return server version by format v1_20_R3
+     */
     public static Optional<String> getStringVersion() {
-        final AtomicReference<String> versionReference = new AtomicReference<>();
+        final String[] nmsVersionSplit = Bukkit.getServer().getClass().getPackage().getName().split("\\.");
 
-        Arrays.stream(Package.getPackages())
-                .filter(aPackage -> aPackage.getName().startsWith("org.bukkit.craftbukkit.v"))
-                .findAny()
-                .ifPresent(aPackage -> {
-                    final String version = aPackage.getName().split("\\.")[3];
+        if (nmsVersionSplit.length >= 4) {
+            final String nmsVersion = nmsVersionSplit[3];
+            if (nmsVersion.startsWith("v")) {
+                return Optional.of(nmsVersion);
+            }
+            else {
+                return Optional.empty();
+            }
+        }
 
-                    try {
-                        Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
-                        versionReference.set(version);
-                    }
-                    catch (ClassNotFoundException ignored) { }
-                });
-
-        return Optional.ofNullable(versionReference.get());
+        return Optional.empty();
     }
 
     public static Optional<Integer> getVersion() {
         final Optional<String> optionalVersion = getStringVersion();
 
         if (!optionalVersion.isPresent()) {
-            return Optional.empty();
+            try {
+                Method getMinecraftVersion = Server.class.getMethod("getMinecraftVersion");
+                String minecraftVersion = (String) getMinecraftVersion.invoke(Bukkit.getServer());
+                String[] minecraftVersionSplit = minecraftVersion.split("\\.");
+
+                if (minecraftVersionSplit.length <= 1) {
+                    return Optional.empty();
+                }
+
+                String minorVersion = minecraftVersion.split("\\.")[1];
+                return ParseUtil.parseInteger(minorVersion);
+            }
+            catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                return Optional.empty();
+            }
         }
 
         final String version = optionalVersion.get();
+
         try {
-            return Optional.of(Integer.parseInt(version.substring(1).split("_")[1]));
+            return ParseUtil.parseInteger(version.substring(1).split("_")[1]);
         }
         catch (Exception e) {
             return Optional.empty();
