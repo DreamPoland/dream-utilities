@@ -67,19 +67,27 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setType(@NonNull ItemStack itemStack, boolean clone) {
-        return clone ? this.setType(new ItemStack(itemStack)) : this.setType(itemStack);
+    public ItemBuilder setType(@NonNull ItemStack itemStack) {
+        return this.setType(itemStack, true);
     }
 
-    public ItemBuilder setType(@NonNull ItemStack itemStack) {
+    public ItemBuilder setType(@NonNull ItemStack itemStack, boolean clone) {
 
-        itemStack.setAmount(this.itemStack.getAmount());
-
-        if (this.itemStack.hasItemMeta()) {
-            itemStack.setItemMeta(this.itemStack.getItemMeta());
+        final ItemStack copy;
+        if (clone) {
+            copy = new ItemStack(itemStack);
+        }
+        else {
+            copy = itemStack;
         }
 
-        this.itemStack = itemStack;
+        copy.setAmount(this.itemStack.getAmount());
+
+        if (this.itemStack.hasItemMeta()) {
+            copy.setItemMeta(this.itemStack.getItemMeta());
+        }
+
+        this.itemStack = copy;
         return this;
     }
 
