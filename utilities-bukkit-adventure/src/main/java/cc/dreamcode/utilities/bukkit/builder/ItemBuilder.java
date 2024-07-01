@@ -67,6 +67,22 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setType(@NonNull ItemStack itemStack, boolean clone) {
+        return clone ? this.setType(new ItemStack(itemStack)) : this.setType(itemStack);
+    }
+
+    public ItemBuilder setType(@NonNull ItemStack itemStack) {
+
+        itemStack.setAmount(this.itemStack.getAmount());
+
+        if (this.itemStack.hasItemMeta()) {
+            itemStack.setItemMeta(this.itemStack.getItemMeta());
+        }
+
+        this.itemStack = itemStack;
+        return this;
+    }
+
     public ItemBuilder withDurability(int durability) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
@@ -290,10 +306,8 @@ public class ItemBuilder {
 
     public ItemBuilder withCustomMeta(@NonNull Function<ItemMeta, ItemMeta> function) {
 
-        if (this.itemStack.hasItemMeta()) {
-            final ItemMeta itemMeta = this.itemStack.getItemMeta();
-            this.itemStack.setItemMeta(function.apply(itemMeta));
-        }
+        final ItemMeta itemMeta = this.itemStack.getItemMeta();
+        this.itemStack.setItemMeta(function.apply(itemMeta));
 
         return this;
     }
