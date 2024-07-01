@@ -1,12 +1,12 @@
 package cc.dreamcode.utilities.object;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
-@Data(staticConstructor = "of")
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor(staticName = "of")
 public class Triple<A, B, C> {
 
     private final A first;
@@ -19,6 +19,6 @@ public class Triple<A, B, C> {
     }
 
     public MutableTriple<A, B, C> mutable() {
-        return new MutableTriple<>(this.first, this.second, this.third);
+        return MutableTriple.of(this.first, this.second, this.third);
     }
 }

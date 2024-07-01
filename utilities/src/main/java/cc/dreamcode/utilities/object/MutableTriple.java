@@ -5,8 +5,8 @@ import lombok.Data;
 
 import java.util.function.Consumer;
 
-@Data(staticConstructor = "of")
-@AllArgsConstructor
+@Data
+@AllArgsConstructor(staticName = "of")
 public class MutableTriple<A, B, C> {
 
     private A first;
@@ -19,6 +19,6 @@ public class MutableTriple<A, B, C> {
     }
 
     public Triple<A, B, C> immutable() {
-        return new Triple<>(this.first, this.second, this.third);
+        return Triple.of(this.first, this.second, this.third);
     }
 }

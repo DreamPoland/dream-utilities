@@ -1,12 +1,12 @@
 package cc.dreamcode.utilities.object;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
-@Data(staticConstructor = "of")
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor(staticName = "of")
 public class Duo<A, B> {
 
     private final A first;
@@ -18,6 +18,6 @@ public class Duo<A, B> {
     }
 
     public MutableDuo<A, B> mutable() {
-        return new MutableDuo<>(this.first, this.second);
+        return MutableDuo.of(this.first, this.second);
     }
 }

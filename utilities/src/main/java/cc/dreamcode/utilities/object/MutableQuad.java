@@ -5,8 +5,8 @@ import lombok.Data;
 
 import java.util.function.Consumer;
 
-@Data(staticConstructor = "of")
-@AllArgsConstructor
+@Data
+@AllArgsConstructor(staticName = "of")
 public class MutableQuad<A, B, C, D> {
 
     private A first;
@@ -20,6 +20,6 @@ public class MutableQuad<A, B, C, D> {
     }
 
     public Quad<A, B, C, D> immutable() {
-        return new Quad<>(this.first, this.second, this.third, this.fourth);
+        return Quad.of(this.first, this.second, this.third, this.fourth);
     }
 }

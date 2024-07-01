@@ -5,8 +5,8 @@ import lombok.Data;
 
 import java.util.function.Consumer;
 
-@Data(staticConstructor = "of")
-@AllArgsConstructor
+@Data
+@AllArgsConstructor(staticName = "of")
 public class MutableDuo<A, B> {
 
     private A first;
@@ -18,6 +18,6 @@ public class MutableDuo<A, B> {
     }
 
     public Duo<A, B> immutable() {
-        return new Duo<>(this.first, this.second);
+        return Duo.of(this.first, this.second);
     }
 }
