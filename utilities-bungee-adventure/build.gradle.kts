@@ -10,7 +10,7 @@ dependencies {
     compileOnly("net.md-5:bungeecord-api:1.20-R0.1-SNAPSHOT")
 
     // -- placeholders --
-    implementation("eu.okaeri:okaeri-placeholders-core:5.0.1")
+    implementation("eu.okaeri:okaeri-placeholders-core:5.1.0")
 
     // -- kyori-adventure --
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
