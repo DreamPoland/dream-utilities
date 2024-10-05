@@ -1,5 +1,6 @@
 repositories {
     maven("https://repo.codemc.io/repository/nms")
+    maven("https://repo.codemc.io/repository/maven-public")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
 }
 

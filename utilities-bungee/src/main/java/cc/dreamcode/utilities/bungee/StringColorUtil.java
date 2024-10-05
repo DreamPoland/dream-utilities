@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class StringColorUtil {
 
-    private static final Pattern hexPattern = Pattern.compile("&#([0-9A-Fa-f]{6})");
+    private static final Pattern HEX_PATTERN = Pattern.compile("&#([0-9A-Fa-f]{6})");
 
     public static String fixColor(@NonNull String text) {
         return ChatColor.translateAlternateColorCodes('&', processRgb(text));
@@ -29,7 +29,7 @@ public class StringColorUtil {
     }
 
     public static String fixColor(@NonNull Locale locale, @NonNull String text, @NonNull Map<String, Object> placeholders) {
-        return fixColor(StringUtil.replace(locale, text, placeholders));
+        return fixColor(StringUtil.replace(text, locale, placeholders));
     }
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
@@ -55,7 +55,7 @@ public class StringColorUtil {
     }
 
     private static String processRgb(@NonNull String text) {
-        Matcher matcher = hexPattern.matcher(text);
+        Matcher matcher = HEX_PATTERN.matcher(text);
 
         AtomicReference<String> atomicText = new AtomicReference<>(text);
         while (matcher.find()) {

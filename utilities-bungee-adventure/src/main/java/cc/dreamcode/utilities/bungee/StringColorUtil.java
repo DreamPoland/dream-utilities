@@ -2,16 +2,13 @@ package cc.dreamcode.utilities.bungee;
 
 import cc.dreamcode.utilities.StringUtil;
 import cc.dreamcode.utilities.builder.MapBuilder;
-import cc.dreamcode.utilities.bungee.adventure.AdventureLegacy;
-import eu.okaeri.placeholders.context.PlaceholderContext;
-import eu.okaeri.placeholders.message.CompiledMessage;
+import cc.dreamcode.utilities.bungee.adventure.AdventureUtil;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -55,7 +52,7 @@ public class StringColorUtil {
     }
 
     public static String legacyFixColor(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
-        return legacyFixColor(StringUtil.replace(locale, text, placeholders));
+        return legacyFixColor(StringUtil.replace(text, locale, placeholders));
     }
 
     public static List<String> legacyFixColor(@NonNull List<String> stringList) {
@@ -77,25 +74,17 @@ public class StringColorUtil {
     }
 
     public static String fixColor(@NonNull String text) {
-        return AdventureLegacy.serialize(AdventureLegacy.deserialize(text));
+        return legacyFixColor(AdventureUtil.format(text));
     }
 
     public static String fixColor(@NonNull String text, @NonNull Map<String, Object> placeholders) {
-        CompiledMessage compiledMessage = CompiledMessage.of(Locale.forLanguageTag("pl"), text);
-        PlaceholderContext placeholderContext = StringUtil.getPlaceholders()
-                .contextOf(compiledMessage)
-                .with(placeholders);
-
-        return AdventureLegacy.serialize(AdventureLegacy.deserialize(text, AdventureLegacy.getPlaceholderConfig(placeholderContext)));
+        final String formattedText = AdventureUtil.format(text, placeholders);
+        return legacyFixColor(formattedText);
     }
 
     public static String fixColor(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
-        CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
-        PlaceholderContext placeholderContext = StringUtil.getPlaceholders()
-                .contextOf(compiledMessage)
-                .with(placeholders);
-
-        return AdventureLegacy.serialize(AdventureLegacy.deserialize(text, AdventureLegacy.getPlaceholderConfig(placeholderContext)));
+        final String formattedText = AdventureUtil.format(text, locale, placeholders);
+        return legacyFixColor(formattedText);
     }
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
@@ -130,17 +119,6 @@ public class StringColorUtil {
         return Arrays.stream(strings)
                 .map(StringColorUtil::breakColor)
                 .collect(Collectors.toList());
-    }
-
-    private static ChatColor getClosestColor(@NonNull Color color) {
-        return COLORS.entrySet()
-                .stream()
-                .sorted(Comparator.comparing(entry -> Math.pow(color.getRed() - entry.getKey().getRed(), 2) +
-                        Math.pow(color.getRed() - entry.getKey().getRed(), 2) +
-                        Math.pow(color.getRed() - entry.getKey().getRed(), 2)))
-                .map(Map.Entry::getValue)
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("Cannot find closest rgb color to format chat-color. (" + color + ")"));
     }
 
     private static Color hexToRgb(@NonNull String hex) {

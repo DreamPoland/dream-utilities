@@ -55,12 +55,11 @@ public class StringUtil {
                 .apply();
     }
 
-
     public static String replace(@NonNull String text, @NonNull Map<String, Object> placeholders) {
-        return StringUtil.replace(Locale.forLanguageTag("pl"), text, placeholders);
+        return StringUtil.replace(text, Locale.forLanguageTag("pl"), placeholders);
     }
 
-    public static String replace(@NonNull Locale locale, @NonNull String text, @NonNull Map<String, Object> placeholders) {
+    public static String replace(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
         final CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
 
         return StringUtil.placeholders.contextOf(compiledMessage)

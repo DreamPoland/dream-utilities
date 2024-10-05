@@ -2,14 +2,12 @@ package cc.dreamcode.utilities.bukkit.builder;
 
 import cc.dreamcode.utilities.builder.ListBuilder;
 import cc.dreamcode.utilities.bukkit.StringColorUtil;
-import cc.dreamcode.utilities.bukkit.VersionUtil;
 import cc.dreamcode.utilities.bukkit.nbt.ItemNbtUtil;
 import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
@@ -92,21 +90,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder withDurability(int durability) {
-
-        ItemMeta itemMeta = this.itemStack.getItemMeta();
-        if (VersionUtil.isSupported(13) && itemMeta instanceof Damageable) {
-            Damageable damageable = (Damageable) itemMeta;
-
-            if (damageable.hasDamage()) {
-                damageable.setDamage(durability);
-            }
-
-            this.itemStack.setItemMeta(itemMeta);
-        }
-        else {
-            this.itemStack.setDurability((short) durability);
-        }
-
+        this.itemStack.setDurability((short) durability);
         return this;
     }
 

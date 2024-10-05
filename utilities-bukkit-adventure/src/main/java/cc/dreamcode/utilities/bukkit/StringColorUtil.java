@@ -2,9 +2,7 @@ package cc.dreamcode.utilities.bukkit;
 
 import cc.dreamcode.utilities.StringUtil;
 import cc.dreamcode.utilities.builder.MapBuilder;
-import cc.dreamcode.utilities.bukkit.adventure.AdventureLegacy;
-import eu.okaeri.placeholders.context.PlaceholderContext;
-import eu.okaeri.placeholders.message.CompiledMessage;
+import cc.dreamcode.utilities.bukkit.adventure.AdventureUtil;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -26,7 +24,8 @@ public class StringColorUtil {
     private static final char COLOR_CHAR = '\u00A7';
     private static final char ALT_COLOR_CHAR = '&';
 
-    private static final Pattern hexPattern = Pattern.compile(ALT_COLOR_CHAR + "#([0-9A-Fa-f]{6})");
+    private static final Pattern HEX_PATTERN = Pattern.compile(ALT_COLOR_CHAR + "#([0-9A-Fa-f]{6})");
+
     private static final Map<Color, ChatColor> COLORS = new MapBuilder<Color, ChatColor>()
             .put(new Color(0), ChatColor.getByChar('0'))
             .put(new Color(170), ChatColor.getByChar('1'))
@@ -55,7 +54,7 @@ public class StringColorUtil {
     }
 
     public static String legacyFixColor(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
-        return legacyFixColor(StringUtil.replace(locale, text, placeholders));
+        return legacyFixColor(StringUtil.replace(text, locale, placeholders));
     }
 
     public static List<String> legacyFixColor(@NonNull List<String> stringList) {
@@ -77,25 +76,17 @@ public class StringColorUtil {
     }
 
     public static String fixColor(@NonNull String text) {
-        return AdventureLegacy.serialize(AdventureLegacy.deserialize(text));
+        return legacyFixColor(AdventureUtil.format(text));
     }
 
     public static String fixColor(@NonNull String text, @NonNull Map<String, Object> placeholders) {
-        CompiledMessage compiledMessage = CompiledMessage.of(Locale.forLanguageTag("pl"), text);
-        PlaceholderContext placeholderContext = StringUtil.getPlaceholders()
-                .contextOf(compiledMessage)
-                .with(placeholders);
-
-        return AdventureLegacy.serialize(AdventureLegacy.deserialize(text, AdventureLegacy.getPlaceholderConfig(placeholderContext)));
+        final String formattedText = AdventureUtil.format(text, placeholders);
+        return legacyFixColor(formattedText);
     }
 
     public static String fixColor(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
-        CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
-        PlaceholderContext placeholderContext = StringUtil.getPlaceholders()
-                .contextOf(compiledMessage)
-                .with(placeholders);
-
-        return AdventureLegacy.serialize(AdventureLegacy.deserialize(text, AdventureLegacy.getPlaceholderConfig(placeholderContext)));
+        final String formattedText = AdventureUtil.format(text, locale, placeholders);
+        return legacyFixColor(formattedText);
     }
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
@@ -148,7 +139,7 @@ public class StringColorUtil {
     }
 
     private static String processRgb(@NonNull String text) {
-        Matcher matcher = hexPattern.matcher(text);
+        Matcher matcher = HEX_PATTERN.matcher(text);
 
         AtomicReference<String> atomicText = new AtomicReference<>(text);
         while (matcher.find()) {
