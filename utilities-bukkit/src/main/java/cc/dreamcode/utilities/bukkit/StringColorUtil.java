@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class StringColorUtil {
 
-    private static final char COLOR_CHAR = '§';
+    private static final char COLOR_CHAR = '\u00A7';
     private static final char ALT_COLOR_CHAR = '&';
 
     private static final Pattern HEX_PATTERN = Pattern.compile(ALT_COLOR_CHAR + "#([0-9A-Fa-f]{6})");
