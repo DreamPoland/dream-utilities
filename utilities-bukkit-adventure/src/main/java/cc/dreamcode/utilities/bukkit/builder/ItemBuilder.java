@@ -234,33 +234,13 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder legacyFixColors() {
+    public ItemBuilder fixColors(@NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         assert itemMeta != null;
 
         if (itemMeta.hasDisplayName()) {
-            itemMeta.setDisplayName(StringColorUtil.legacyFixColor(itemMeta.getDisplayName()));
-        }
-
-        if (itemMeta.hasLore()) {
-            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
-                    .stream()
-                    .map(StringColorUtil::legacyFixColor)
-                    .collect(Collectors.toList()));
-        }
-
-        this.itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    public ItemBuilder legacyFixColors(@NonNull Map<String, Object> placeholders) {
-
-        ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
-
-        if (itemMeta.hasDisplayName()) {
-            final String compiledMessage = StringColorUtil.legacyFixColor(itemMeta.getDisplayName(), placeholders);
+            final String compiledMessage = StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders, colorizePlaceholders);
 
             itemMeta.setDisplayName(compiledMessage);
         }
@@ -268,7 +248,7 @@ public class ItemBuilder {
         if (itemMeta.hasLore()) {
             itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
                     .stream()
-                    .map(text -> StringColorUtil.legacyFixColor(text, placeholders))
+                    .map(text -> StringColorUtil.fixColor(text, placeholders, colorizePlaceholders))
                     .collect(Collectors.toList()));
         }
 

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class StringColorUtil {
 
-    private static final char COLOR_CHAR = '\u00A7';
+    private static final char COLOR_CHAR = '§';
     private static final char ALT_COLOR_CHAR = '&';
 
     private static final Pattern HEX_PATTERN = Pattern.compile(ALT_COLOR_CHAR + "#([0-9A-Fa-f]{6})");
@@ -48,11 +48,24 @@ public class StringColorUtil {
     }
 
     public static String fixColor(@NonNull String text, @NonNull Map<String, Object> placeholders) {
-        return fixColor(StringUtil.replace(text, placeholders));
+        return fixColor(text, Locale.forLanguageTag("pl"), placeholders, true);
+    }
+
+    public static String fixColor(@NonNull String text, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+        return fixColor(text, Locale.forLanguageTag("pl"), placeholders, colorizePlaceholders);
     }
 
     public static String fixColor(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
-        return fixColor(StringUtil.replace(text, locale, placeholders));
+        return fixColor(text, locale, placeholders, true);
+    }
+
+    public static String fixColor(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+
+        if (colorizePlaceholders) {
+            return fixColor(StringUtil.replace(text, locale, placeholders));
+        }
+
+        return StringUtil.replace(fixColor(text), locale, placeholders);
     }
 
     public static List<String> fixColor(@NonNull List<String> stringList) {
@@ -64,6 +77,24 @@ public class StringColorUtil {
     public static List<String> fixColor(@NonNull List<String> stringList, @NonNull Map<String, Object> placeholders) {
         return stringList.stream()
                 .map(text -> fixColor(text, placeholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> fixColor(@NonNull List<String> stringList, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+        return stringList.stream()
+                .map(text -> fixColor(text, placeholders, colorizePlaceholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> fixColor(@NonNull List<String> stringList, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
+        return stringList.stream()
+                .map(text -> fixColor(text, locale, placeholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> fixColor(@NonNull List<String> stringList, @NonNull Locale locale, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+        return stringList.stream()
+                .map(text -> fixColor(text, locale, placeholders, colorizePlaceholders))
                 .collect(Collectors.toList());
     }
 

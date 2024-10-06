@@ -234,6 +234,28 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder fixColors(@NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        assert itemMeta != null;
+
+        if (itemMeta.hasDisplayName()) {
+            final String compiledMessage = StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders, colorizePlaceholders);
+
+            itemMeta.setDisplayName(compiledMessage);
+        }
+
+        if (itemMeta.hasLore()) {
+            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+                    .stream()
+                    .map(text -> StringColorUtil.fixColor(text, placeholders, colorizePlaceholders))
+                    .collect(Collectors.toList()));
+        }
+
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
     public ItemBuilder breakColors() {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
