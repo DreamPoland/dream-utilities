@@ -19,12 +19,12 @@ maven { url "https://repo.dreamcode.cc/releases" }
 <dependency>
   <groupId>cc.dreamcode</groupId>
   <artifactId>utilities</artifactId>
-  <version>1.4.8</version>
+  <version>1.4.9</version>
 </dependency>
 ```
 
 ```groovy
-implementation "cc.dreamcode:utilities:1.4.8"
+implementation "cc.dreamcode:utilities:1.4.9"
 ```
 
 ### Supported platforms:
@@ -35,11 +35,11 @@ implementation "cc.dreamcode:utilities:1.4.8"
 <dependency>
   <groupId>cc.dreamcode</groupId>
   <artifactId>utilities-{platform}</artifactId>
-  <version>1.4.8</version>
+  <version>1.4.9</version>
 </dependency>
 ```
 ```groovy
-implementation "cc.dreamcode:utilities-{platform}:1.4.8"
+implementation "cc.dreamcode:utilities-{platform}:1.4.9"
 ```
 
 For utilities content, open project modules and see the contents of the classes.
