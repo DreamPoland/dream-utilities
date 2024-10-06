@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public final class ColorProcessor {
 
-    private static final char COLOR_CHAR = '§';
+    private static final char COLOR_CHAR = '\u00A7';
 
     private static final Pattern ALL_TEXT_PATTERN = Pattern.compile(".*");
     private static final Pattern FIELD_PATTERN = Pattern.compile("\\{(?<content>[^}]+)}");
