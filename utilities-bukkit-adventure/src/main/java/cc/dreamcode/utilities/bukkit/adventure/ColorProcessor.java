@@ -24,7 +24,7 @@ public final class ColorProcessor {
     private static final Pattern FIELD_PATTERN = Pattern.compile("\\{(?<content>[^}]+)}");
     private static final Pattern SECTION_COLOR_PATTERN = Pattern.compile("(?i)§([0-9A-FK-OR])");
     private static final Pattern LEGACY_RGB_PATTERN = Pattern.compile("&#([a-fA-F0-9]{6})");
-    private static final Pattern URL_PATTERN = Pattern.compile("https?://(www\\.)?[-a-zA-Z0-9]{1,256}\\.[a-zA-Z]{2,6}(/[-a-zA-Z0-9()._~%!$#&*+;=:@/?]*)?");
+    private static final Pattern URL_PATTERN = Pattern.compile("https?:\\/\\/(www\\.)?[a-zA-Z0-9\\-._~%]{1,256}\\.[a-zA-Z]{1,6}(\\/[a-zA-Z0-9\\-._~%!$&'()*+,;=:@/#?]*)?");
 
     private static final LegacyComponentSerializer SECTION_SERIALIZER = LegacyComponentSerializer.legacySection()
             .toBuilder()
@@ -52,20 +52,32 @@ public final class ColorProcessor {
             .build();
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
-            .preProcessor(text -> SECTION_COLOR_PATTERN.matcher(text).replaceAll("&$1"))
-            .preProcessor(text -> LEGACY_RGB_PATTERN.matcher(text).replaceAll("<#$1>"))
-            .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT))
-            .postProcessor(component -> component.replaceText(AMPERSAND_REPLACEMENTS))
+            .preProcessor(text -> {
+                String replaceText = text;
+                replaceText = SECTION_COLOR_PATTERN.matcher(replaceText).replaceAll("&$1");
+                replaceText = LEGACY_RGB_PATTERN.matcher(replaceText).replaceAll("<#$1>");
+                return replaceText;
+            })
+            .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT)
+                    .replaceText(AMPERSAND_REPLACEMENTS))
             .build();
     private static final MiniMessage PLACEHOLDER_MINI_MESSAGE = MiniMessage.builder()
-            .preProcessor(text -> SECTION_COLOR_PATTERN.matcher(text).replaceAll("&$1"))
-            .preProcessor(text -> LEGACY_RGB_PATTERN.matcher(text).replaceAll("<#$1>"))
+            .preProcessor(text -> {
+                String replaceText = text;
+                replaceText = SECTION_COLOR_PATTERN.matcher(replaceText).replaceAll("&$1");
+                replaceText = LEGACY_RGB_PATTERN.matcher(replaceText).replaceAll("<#$1>");
+                return replaceText;
+            })
             .tags(TagResolver.empty())
             .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT))
             .build();
     private static final MiniMessage COLORIZED_PLACEHOLDER_MINI_MESSAGE = MiniMessage.builder()
-            .preProcessor(text -> SECTION_COLOR_PATTERN.matcher(text).replaceAll("&$1"))
-            .preProcessor(text -> LEGACY_RGB_PATTERN.matcher(text).replaceAll("<#$1>"))
+            .preProcessor(text -> {
+                String replaceText = text;
+                replaceText = SECTION_COLOR_PATTERN.matcher(replaceText).replaceAll("&$1");
+                replaceText = LEGACY_RGB_PATTERN.matcher(replaceText).replaceAll("<#$1>");
+                return replaceText;
+            })
             .tags(TagResolver.builder()
                     .resolver(StandardTags.color())
                     .resolver(StandardTags.decorations())
@@ -73,8 +85,8 @@ public final class ColorProcessor {
                     .resolver(StandardTags.gradient())
                     .resolver(StandardTags.transition())
                     .build())
-            .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT))
-            .postProcessor(component -> component.replaceText(AMPERSAND_REPLACEMENTS))
+            .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT)
+                    .replaceText(AMPERSAND_REPLACEMENTS))
             .build();
 
     public static boolean forceRgbSupport = false;
