@@ -7,6 +7,7 @@ import eu.okaeri.placeholders.message.CompiledMessage;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
@@ -19,33 +20,48 @@ import java.util.stream.Collectors;
 
 public final class ColorProcessor {
 
-    private static final char COLOR_CHAR = '\u00A7';
-
     private static final Pattern ALL_TEXT_PATTERN = Pattern.compile(".*");
     private static final Pattern FIELD_PATTERN = Pattern.compile("\\{(?<content>[^}]+)}");
     private static final Pattern SECTION_COLOR_PATTERN = Pattern.compile("(?i)§([0-9A-FK-OR])");
     private static final Pattern LEGACY_RGB_PATTERN = Pattern.compile("&#([a-fA-F0-9]{6})");
+    private static final Pattern URL_PATTERN = Pattern.compile("https?://(www\\.)?[-a-zA-Z0-9]{1,256}\\.[a-zA-Z]{2,6}(/[-a-zA-Z0-9()._~%!$#&*+;=:@/?]*)?");
 
-    private static final LegacyComponentSerializer AMPERSAND_SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
-    private static final LegacyComponentSerializer LEGACY_SECTION_SERIALIZER = LegacyComponentSerializer.legacySection();
-    private static final LegacyComponentSerializer SECTION_SERIALIZER = LegacyComponentSerializer.builder()
-            .character(COLOR_CHAR)
+    private static final LegacyComponentSerializer SECTION_SERIALIZER = LegacyComponentSerializer.legacySection()
+            .toBuilder()
             .hexColors()
+            .useUnusualXRepeatedCharacterHexFormat()
             .build();
+    private static final LegacyComponentSerializer LEGACY_SECTION_SERIALIZER = LegacyComponentSerializer.legacySection();
 
-    private static final TextReplacementConfig COLOR_REPLACEMENTS = TextReplacementConfig.builder()
+    private static final LegacyComponentSerializer AMPERSAND_SERIALIZER = LegacyComponentSerializer.legacyAmpersand()
+            .toBuilder()
+            .hexColors()
+            .useUnusualXRepeatedCharacterHexFormat()
+            .build();
+    private static final LegacyComponentSerializer LEGACY_AMPERSAND_SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
+
+    private static final TextReplacementConfig AMPERSAND_REPLACEMENTS = TextReplacementConfig.builder()
             .match(ALL_TEXT_PATTERN)
-            .replacement((result, input) -> AMPERSAND_SERIALIZER.deserialize(result.group()))
+            .replacement((result, input) -> ColorProcessor.forceRgbSupport || VersionUtil.isSupported(16)
+                    ? AMPERSAND_SERIALIZER.deserialize(result.group())
+                    : LEGACY_AMPERSAND_SERIALIZER.deserialize(result.group()))
+            .build();
+    private static final TextReplacementConfig CLICKABLE_URL_REPLACEMENT = TextReplacementConfig.builder()
+            .match(URL_PATTERN)
+            .replacement(url -> url.clickEvent(ClickEvent.openUrl(url.content())))
             .build();
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
             .preProcessor(text -> SECTION_COLOR_PATTERN.matcher(text).replaceAll("&$1"))
             .preProcessor(text -> LEGACY_RGB_PATTERN.matcher(text).replaceAll("<#$1>"))
-            .postProcessor(component -> component.replaceText(COLOR_REPLACEMENTS))
+            .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT))
+            .postProcessor(component -> component.replaceText(AMPERSAND_REPLACEMENTS))
             .build();
     private static final MiniMessage PLACEHOLDER_MINI_MESSAGE = MiniMessage.builder()
             .preProcessor(text -> SECTION_COLOR_PATTERN.matcher(text).replaceAll("&$1"))
-            .tags(TagResolver.builder().build())
+            .preProcessor(text -> LEGACY_RGB_PATTERN.matcher(text).replaceAll("<#$1>"))
+            .tags(TagResolver.empty())
+            .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT))
             .build();
     private static final MiniMessage COLORIZED_PLACEHOLDER_MINI_MESSAGE = MiniMessage.builder()
             .preProcessor(text -> SECTION_COLOR_PATTERN.matcher(text).replaceAll("&$1"))
@@ -57,7 +73,8 @@ public final class ColorProcessor {
                     .resolver(StandardTags.gradient())
                     .resolver(StandardTags.transition())
                     .build())
-            .postProcessor(component -> component.replaceText(COLOR_REPLACEMENTS))
+            .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT))
+            .postProcessor(component -> component.replaceText(AMPERSAND_REPLACEMENTS))
             .build();
 
     public static boolean forceRgbSupport = false;
@@ -98,7 +115,7 @@ public final class ColorProcessor {
 
     public static String process(@NonNull String text) {
 
-        final Component component = component(text);
+        final Component component = MINI_MESSAGE.deserialize(text);
 
         if (ColorProcessor.forceRgbSupport || VersionUtil.isSupported(16)) {
             return SECTION_SERIALIZER.serialize(component);
@@ -129,7 +146,7 @@ public final class ColorProcessor {
 
     private static String process(@NonNull String text, @NonNull PlaceholderContext placeholderContext, boolean colorizePlaceholders) {
 
-        Component component = component(text);
+        Component component = MINI_MESSAGE.deserialize(text);
 
         final Map<String, String> fields = renderFields(placeholderContext);
         final TextReplacementConfig replacementConfig = replacementConfig(fields, colorizePlaceholders);
