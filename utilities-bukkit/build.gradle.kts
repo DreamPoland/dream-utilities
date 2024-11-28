@@ -10,5 +10,5 @@ dependencies {
     compileOnly("org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT")
 
     // -- placeholders --
-    implementation("eu.okaeri:okaeri-placeholders-core:5.0.1")
+    implementation("eu.okaeri:okaeri-placeholders-core:5.1.0")
 }
