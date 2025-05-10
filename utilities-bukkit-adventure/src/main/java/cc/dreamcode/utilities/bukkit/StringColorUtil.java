@@ -73,7 +73,7 @@ public class StringColorUtil {
     }
 
     public static String breakColor(@NonNull String text) {
-        return ColorProcessor.decolor(text);
+        return ColorProcessor.deprocess(text);
     }
 
     public static List<String> breakColor(@NonNull List<String> stringList) {

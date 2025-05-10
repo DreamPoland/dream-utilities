@@ -172,7 +172,7 @@ public final class ColorProcessor {
         return LEGACY_SECTION_SERIALIZER.serialize(component);
     }
 
-    public static String decolor(@NonNull String text) {
+    public static String deprocess(@NonNull String text) {
 
         final Component component;
 
