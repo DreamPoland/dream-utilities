@@ -85,4 +85,60 @@ public class TimeUtil {
     public static String formatSec(@NonNull Duration duration) {
         return formatSec(duration.getSeconds());
     }
+
+    public static String formatMin(long seconds) {
+
+        long days = TimeUnit.SECONDS.toDays(seconds);
+        long hours = TimeUnit.SECONDS.toHours(seconds) - (days * 24);
+        long minutes = TimeUnit.SECONDS.toMinutes(seconds) - (days * 24 * 60) - (hours * 60);
+
+        if (days != 0) {
+            return days + "d " + hours + "h " + minutes + "min";
+        }
+
+        if (hours != 0) {
+            return hours + "h " + minutes + "min";
+        }
+
+        return minutes + "min";
+    }
+
+    public static String formatMin(@NonNull Duration duration) {
+        return formatMin(duration.getSeconds());
+    }
+
+    public static String formatHours(long seconds) {
+
+        long days = TimeUnit.SECONDS.toDays(seconds);
+        long hours = TimeUnit.SECONDS.toHours(seconds) - (days * 24);
+
+        if (days != 0) {
+            return days + "d " + hours + "h";
+        }
+
+        return hours + "h";
+    }
+
+    public static String formatHours(@NonNull Duration duration) {
+        return formatHours(duration.getSeconds());
+    }
+
+    public static String formatDays(long seconds) {
+        long days = TimeUnit.SECONDS.toDays(seconds);
+        return days + "d";
+    }
+
+    public static String formatDays(@NonNull Duration duration) {
+        return formatDays(duration.getSeconds());
+    }
+
+    public static String formatPlayingTime(long seconds) {
+        long hours = TimeUnit.SECONDS.toHours(seconds);
+        long minutes = TimeUnit.SECONDS.toMinutes(seconds) - hours * 60L;
+        return hours != 0L ? hours + "h " + minutes + "min" : minutes + "min";
+    }
+
+    public static String formatPlayingTime(@NonNull Duration duration) {
+        return formatPlayingTime(duration.getSeconds());
+    }
 }
