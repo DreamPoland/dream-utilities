@@ -4,15 +4,15 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":utilities"))
+    api(project(":utilities"))
 
     // -- spigot api -- (base)
-    compileOnly("org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT")
+    compileOnly(libs.spigot.api)
 
     // -- placeholders --
-    implementation("eu.okaeri:okaeri-placeholders-core:5.0.1")
+    api(libs.okaeri.placeholders)
 
     // -- kyori-adventure --
-    implementation("net.kyori:adventure-text-minimessage:4.17.0")
-    implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
+    api(libs.adventure.minimessage)
+    api(libs.adventure.serializer)
 }

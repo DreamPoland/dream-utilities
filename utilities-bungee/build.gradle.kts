@@ -5,11 +5,11 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":utilities"))
+    api(project(":utilities"))
 
     // -- bungee api -- (base)
-    compileOnly("net.md-5:bungeecord-api:1.20-R0.1-SNAPSHOT")
+    compileOnly(libs.bungeecord.api)
 
     // -- placeholders --
-    implementation("eu.okaeri:okaeri-placeholders-core:5.0.1")
+    api(libs.okaeri.placeholders)
 }
