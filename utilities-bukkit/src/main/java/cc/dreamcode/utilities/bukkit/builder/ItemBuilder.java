@@ -39,6 +39,17 @@ public class ItemBuilder {
         }
     }
 
+    public ItemBuilder(@NonNull ItemStack itemStack, int amount, boolean clone) {
+        if (clone) {
+            this.itemStack = new ItemStack(itemStack);
+        }
+        else {
+            this.itemStack = itemStack;
+        }
+
+        this.itemStack.setAmount(amount);
+    }
+
     public static ItemBuilder of(@NonNull Material material) {
         return new ItemBuilder(material);
     }
@@ -49,6 +60,10 @@ public class ItemBuilder {
 
     public static ItemBuilder of(@NonNull ItemStack itemStack) {
         return new ItemBuilder(itemStack, true);
+    }
+
+    public static ItemBuilder of(@NonNull ItemStack itemStack, int amount) {
+        return new ItemBuilder(itemStack, amount, true);
     }
 
     public static ItemBuilder manipulate(@NonNull ItemStack itemStack) {

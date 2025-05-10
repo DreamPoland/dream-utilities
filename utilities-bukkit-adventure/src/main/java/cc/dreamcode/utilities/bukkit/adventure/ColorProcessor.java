@@ -172,6 +172,20 @@ public final class ColorProcessor {
         return LEGACY_SECTION_SERIALIZER.serialize(component);
     }
 
+    public static String decolor(@NonNull String text) {
+
+        final Component component;
+
+        if (ColorProcessor.forceRgbSupport || VersionUtil.isSupported(16)) {
+            component = SECTION_SERIALIZER.deserialize(text);
+        }
+        else {
+            component = LEGACY_SECTION_SERIALIZER.deserialize(text);
+        }
+
+        return MINI_MESSAGE.serialize(component);
+    }
+
     private static Map<String, String> renderFields(@NonNull PlaceholderContext placeholderContext) {
         return placeholderContext.renderFields()
                 .entrySet()

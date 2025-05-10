@@ -73,7 +73,7 @@ public class StringColorUtil {
     }
 
     public static String breakColor(@NonNull String text) {
-        return text.replace(COLOR_CHAR + "", ALT_COLOR_CHAR + "");
+        return ColorProcessor.decolor(text);
     }
 
     public static List<String> breakColor(@NonNull List<String> stringList) {
@@ -85,6 +85,22 @@ public class StringColorUtil {
     public static List<String> breakColor(@NonNull String... strings) {
         return Arrays.stream(strings)
                 .map(StringColorUtil::breakColor)
+                .collect(Collectors.toList());
+    }
+
+    public static String legacyBreakColor(@NonNull String text) {
+        return text.replace(COLOR_CHAR + "", ALT_COLOR_CHAR + "");
+    }
+
+    public static List<String> legacyBreakColor(@NonNull List<String> stringList) {
+        return stringList.stream()
+                .map(StringColorUtil::legacyBreakColor)
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> legacyBreakColor(@NonNull String... strings) {
+        return Arrays.stream(strings)
+                .map(StringColorUtil::legacyBreakColor)
                 .collect(Collectors.toList());
     }
 }

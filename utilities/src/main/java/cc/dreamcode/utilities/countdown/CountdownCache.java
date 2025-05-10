@@ -52,7 +52,6 @@ public class CountdownCache {
         this.map.remove(uuid);
     }
 
-    // method can be used to remove unused countdown objects
     public List<UUID> uuidToRemove() {
         return this.map.keySet()
                 .stream()
