@@ -11,5 +11,5 @@ dependencies {
     compileOnly(libs.bungeecord.api)
 
     // -- placeholders --
-    api(libs.okaeri.placeholders)
+    implementation(libs.okaeri.placeholders)
 }

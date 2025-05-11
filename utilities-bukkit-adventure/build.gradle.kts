@@ -10,9 +10,9 @@ dependencies {
     compileOnly(libs.spigot.api)
 
     // -- placeholders --
-    api(libs.okaeri.placeholders)
+    implementation(libs.okaeri.placeholders)
 
     // -- kyori-adventure --
-    api(libs.adventure.minimessage)
-    api(libs.adventure.serializer)
+    implementation(libs.adventure.minimessage)
+    implementation(libs.adventure.serializer)
 }

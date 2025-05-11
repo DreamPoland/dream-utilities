@@ -10,5 +10,5 @@ dependencies {
     compileOnly(libs.spigot.api)
 
     // -- placeholders --
-    api(libs.okaeri.placeholders)
+    implementation(libs.okaeri.placeholders)
 }
