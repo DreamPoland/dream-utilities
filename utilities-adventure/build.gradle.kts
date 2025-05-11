@@ -6,6 +6,7 @@ repositories {
 dependencies {
     api(project(":utilities"))
 
-    // -- spigot api -- (base)
-    compileOnly(libs.spigot.api)
+    // -- kyori-adventure --
+    api(libs.adventure.minimessage)
+    api(libs.adventure.serializer)
 }

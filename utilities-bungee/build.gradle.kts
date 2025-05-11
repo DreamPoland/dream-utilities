@@ -9,7 +9,4 @@ dependencies {
 
     // -- bungee api -- (base)
     compileOnly(libs.bungeecord.api)
-
-    // -- placeholders --
-    implementation(libs.okaeri.placeholders)
 }

@@ -1,7 +1,6 @@
-package cc.dreamcode.utilities.bukkit.adventure;
+package cc.dreamcode.utilities.adventure;
 
 import cc.dreamcode.utilities.StringUtil;
-import cc.dreamcode.utilities.bukkit.VersionUtil;
 import eu.okaeri.placeholders.context.PlaceholderContext;
 import eu.okaeri.placeholders.message.CompiledMessage;
 import lombok.NonNull;
@@ -18,7 +17,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class ColorProcessor {
+public final class AdventureUtil {
 
     private static final Pattern ALL_TEXT_PATTERN = Pattern.compile(".*");
     private static final Pattern FIELD_PATTERN = Pattern.compile("\\{(?<content>[^}]+)}");
@@ -42,7 +41,7 @@ public final class ColorProcessor {
 
     private static final TextReplacementConfig AMPERSAND_REPLACEMENTS = TextReplacementConfig.builder()
             .match(ALL_TEXT_PATTERN)
-            .replacement((result, input) -> ColorProcessor.forceRgbSupport || VersionUtil.isSupported(16)
+            .replacement((result, input) -> AdventureUtil.rgbSupport
                     ? AMPERSAND_SERIALIZER.deserialize(result.group())
                     : LEGACY_AMPERSAND_SERIALIZER.deserialize(result.group()))
             .build();
@@ -89,7 +88,7 @@ public final class ColorProcessor {
                     .replaceText(AMPERSAND_REPLACEMENTS))
             .build();
 
-    public static boolean forceRgbSupport = false;
+    public static boolean rgbSupport = true;
 
     public static Component component(@NonNull String text) {
         return MINI_MESSAGE.deserialize(text);
@@ -129,7 +128,7 @@ public final class ColorProcessor {
 
         final Component component = MINI_MESSAGE.deserialize(text);
 
-        if (ColorProcessor.forceRgbSupport || VersionUtil.isSupported(16)) {
+        if (AdventureUtil.rgbSupport) {
             return SECTION_SERIALIZER.serialize(component);
         }
 
@@ -165,7 +164,7 @@ public final class ColorProcessor {
 
         component = component.replaceText(replacementConfig);
 
-        if (ColorProcessor.forceRgbSupport || VersionUtil.isSupported(16)) {
+        if (AdventureUtil.rgbSupport) {
             return SECTION_SERIALIZER.serialize(component);
         }
 
@@ -176,7 +175,7 @@ public final class ColorProcessor {
 
         final Component component;
 
-        if (ColorProcessor.forceRgbSupport || VersionUtil.isSupported(16)) {
+        if (AdventureUtil.rgbSupport) {
             component = SECTION_SERIALIZER.deserialize(text);
         }
         else {
@@ -211,7 +210,7 @@ public final class ColorProcessor {
                 .build();
     }
 
-    public static void setForceRgbSupport(boolean forceRgbSupport) {
-        ColorProcessor.forceRgbSupport = forceRgbSupport;
+    public static void setRgbSupport(boolean rgbSupport) {
+        AdventureUtil.rgbSupport = rgbSupport;
     }
 }

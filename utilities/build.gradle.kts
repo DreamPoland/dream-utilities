@@ -1,4 +1,4 @@
 dependencies {
     // -- placeholders --
-    implementation(libs.okaeri.placeholders)
+    api(libs.okaeri.placeholders)
 }
