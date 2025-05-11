@@ -3,7 +3,6 @@ package cc.dreamcode.utilities.bungee;
 import cc.dreamcode.utilities.bungee.color.DefaultColorProcessor;
 import cc.dreamcode.utilities.color.ColorProcessor;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.Map;
 @UtilityClass
 public class StringColorUtil {
 
-    @Setter
     private static ColorProcessor COLOR_PROCESSOR;
 
     static {
@@ -74,5 +72,9 @@ public class StringColorUtil {
 
     public static List<String> breakColor(@NonNull String... strings) {
         return COLOR_PROCESSOR.decolor(strings);
+    }
+
+    public static void setColorProcessor(@NonNull ColorProcessor colorProcessor) {
+        COLOR_PROCESSOR = colorProcessor;
     }
 }
