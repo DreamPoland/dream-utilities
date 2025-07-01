@@ -3,8 +3,8 @@ lombok = "1.18.38"
 spigot-api = "1.16.5-R0.1-SNAPSHOT"
 bungeecord-api = "1.20-R0.1-SNAPSHOT"
 okaeri-placeholders = "5.1.1"
-adventure-minimessage = "4.21.0"
-adventure-serializer = "4.21.0"
+adventure-minimessage = "4.23.0"
+adventure-serializer = "4.23.0"
 
 [libraries]
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
