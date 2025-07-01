@@ -112,7 +112,9 @@ public class ItemBuilder {
     public ItemBuilder setName(@NonNull String name) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         itemMeta.setDisplayName(name);
         this.itemStack.setItemMeta(itemMeta);
@@ -123,7 +125,9 @@ public class ItemBuilder {
     public ItemBuilder startLoreWith(@NonNull List<String> lore) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         if (itemMeta.hasLore()) {
             itemMeta.setLore(new ListBuilder<String>()
@@ -146,7 +150,9 @@ public class ItemBuilder {
     public ItemBuilder appendLore(@NonNull List<String> lore) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         if (itemMeta.hasLore()) {
             itemMeta.setLore(new ListBuilder<String>()
@@ -169,7 +175,9 @@ public class ItemBuilder {
     public ItemBuilder setLore(@NonNull List<String> lore) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         itemMeta.setLore(lore);
         this.itemStack.setItemMeta(itemMeta);
@@ -184,7 +192,9 @@ public class ItemBuilder {
     public ItemBuilder addEnchant(@NonNull Enchantment enchantment, int level, boolean ignoreLevelRestriction) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         itemMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
         this.itemStack.setItemMeta(itemMeta);
@@ -199,7 +209,9 @@ public class ItemBuilder {
     public ItemBuilder addFlags(@NonNull ItemFlag... itemFlag) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         itemMeta.addItemFlags(itemFlag);
         this.itemStack.setItemMeta(itemMeta);
@@ -210,7 +222,9 @@ public class ItemBuilder {
     public ItemBuilder fixColors() {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         if (itemMeta.hasDisplayName()) {
             itemMeta.setDisplayName(StringColorUtil.fixColor(itemMeta.getDisplayName()));
@@ -230,7 +244,9 @@ public class ItemBuilder {
     public ItemBuilder fixColors(@NonNull Map<String, Object> placeholders) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         if (itemMeta.hasDisplayName()) {
             final String compiledMessage = StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders);
@@ -252,7 +268,9 @@ public class ItemBuilder {
     public ItemBuilder fixColors(@NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         if (itemMeta.hasDisplayName()) {
             final String compiledMessage = StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders, colorizePlaceholders);
@@ -274,7 +292,9 @@ public class ItemBuilder {
     public ItemBuilder breakColors() {
 
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        assert itemMeta != null;
+        if (itemMeta == null) {
+            return this;
+        }
 
         if (itemMeta.hasDisplayName()) {
             itemMeta.setDisplayName(StringColorUtil.breakColor(itemMeta.getDisplayName()));
