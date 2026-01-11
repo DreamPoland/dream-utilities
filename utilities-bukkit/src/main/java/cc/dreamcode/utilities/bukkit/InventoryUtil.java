@@ -79,6 +79,7 @@ public class InventoryUtil {
      */
     public static List<ItemStack> hasItem(@NonNull Inventory inventory, @NonNull ItemStack itemStack) {
         return Arrays.stream(inventory.getContents())
+                .filter(Objects::nonNull)
                 .filter(scan -> scan.isSimilar(itemStack))
                 .collect(Collectors.toList());
     }
