@@ -20,7 +20,7 @@ public class TicksUtil {
     }
 
     public static int ticksOf(@NonNull Duration duration) {
-        return ticksOf(duration, false);
+        return ticksOf(duration, true);
     }
 
     public static int ticksOf(@NonNull Duration duration, boolean failsafe) {
@@ -28,7 +28,7 @@ public class TicksUtil {
     }
 
     public static int ticksOf(long millis) {
-        return ticksOf(millis, false);
+        return ticksOf(millis, true);
     }
 
     public static int ticksOf(long millis, boolean failsafe) {
