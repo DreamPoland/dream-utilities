@@ -83,7 +83,13 @@ public class DefaultColorProcessor implements ColorProcessor {
             final String hex = matcher.group();
             final Color color = hexToRgb(hex);
 
-            atomicText.set(atomicText.get().replace(hex, ChatColor.of(color) + ""));
+            try {
+                java.lang.reflect.Method ofMethod = ChatColor.class.getMethod("of", Color.class);
+                ChatColor chatColor = (ChatColor) ofMethod.invoke(null, color);
+                atomicText.set(atomicText.get().replace(hex, chatColor + ""));
+            } catch (Exception e) {
+                atomicText.set(atomicText.get().replace(hex, getClosestColor(color) + ""));
+            }
         }
 
         return atomicText.get();
