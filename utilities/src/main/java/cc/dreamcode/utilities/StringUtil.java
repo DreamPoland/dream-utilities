@@ -12,7 +12,7 @@ import java.util.Map;
 @UtilityClass
 public class StringUtil {
 
-    private static Placeholders placeholders = Placeholders.create(true);
+    private static Placeholders placeholders = Placeholders.create();
 
     public static String join(List<String> stringList) {
         return join(stringList.toArray(new String[0]), "", 0, stringList.size());
@@ -50,7 +50,7 @@ public class StringUtil {
     public static String replace(@NonNull Locale locale, @NonNull String text, @NonNull String from, @NonNull Object to) {
         final CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
 
-        return StringUtil.placeholders.contextOf(compiledMessage)
+        return StringUtil.placeholders.context(compiledMessage)
                 .with(from, to)
                 .apply();
     }
@@ -62,7 +62,7 @@ public class StringUtil {
     public static String replace(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
         final CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
 
-        return StringUtil.placeholders.contextOf(compiledMessage)
+        return StringUtil.placeholders.context(compiledMessage)
                 .with(placeholders)
                 .apply();
     }

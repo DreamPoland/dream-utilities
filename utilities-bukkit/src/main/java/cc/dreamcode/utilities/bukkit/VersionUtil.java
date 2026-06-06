@@ -6,7 +6,6 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -49,31 +48,64 @@ public class VersionUtil {
     public static Optional<Integer> getVersion() {
         final Optional<String> optionalVersion = getStringVersion();
 
-        if (!optionalVersion.isPresent()) {
+        if (optionalVersion.isPresent()) {
+            final String version = optionalVersion.get();
             try {
-                Method getMinecraftVersion = Server.class.getMethod("getMinecraftVersion");
-                String minecraftVersion = (String) getMinecraftVersion.invoke(Bukkit.getServer());
-                String[] minecraftVersionSplit = minecraftVersion.split("\\.");
-
-                if (minecraftVersionSplit.length <= 1) {
-                    return Optional.empty();
-                }
-
-                String minorVersion = minecraftVersion.split("\\.")[1];
-                return ParseUtil.parseInteger(minorVersion);
+                return ParseUtil.parseInteger(version.substring(1).split("_")[1]);
             }
-            catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                return Optional.empty();
+            catch (Exception e) {
+                // fall through to dynamic check
             }
         }
-
-        final String version = optionalVersion.get();
 
         try {
-            return ParseUtil.parseInteger(version.substring(1).split("_")[1]);
+            String bukkitVersion = Bukkit.getBukkitVersion();
+            Optional<Integer> parsed = parseMinorVersion(bukkitVersion);
+            if (parsed.isPresent()) {
+                return parsed;
+            }
         }
         catch (Exception e) {
+            // ignore
+        }
+
+        try {
+            Method getMinecraftVersion = Server.class.getMethod("getMinecraftVersion");
+            String minecraftVersion = (String) getMinecraftVersion.invoke(Bukkit.getServer());
+            Optional<Integer> parsed = parseMinorVersion(minecraftVersion);
+            if (parsed.isPresent()) {
+                return parsed;
+            }
+        }
+        catch (Exception e) {
+            // ignore
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<Integer> parseMinorVersion(String versionString) {
+        if (versionString == null || versionString.isEmpty()) {
             return Optional.empty();
         }
+        int firstDot = versionString.indexOf('.');
+        if (firstDot == -1) {
+            return Optional.empty();
+        }
+        StringBuilder minorBuilder = new StringBuilder();
+        for (int i = firstDot + 1; i < versionString.length(); i++) {
+            char c = versionString.charAt(i);
+            if (Character.isDigit(c)) {
+                minorBuilder.append(c);
+            } else {
+                if (!minorBuilder.isEmpty()) {
+                    break;
+                }
+            }
+        }
+        if (!minorBuilder.isEmpty()) {
+            return ParseUtil.parseInteger(minorBuilder.toString());
+        }
+        return Optional.empty();
     }
 }

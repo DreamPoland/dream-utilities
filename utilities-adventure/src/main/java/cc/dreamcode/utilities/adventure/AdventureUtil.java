@@ -12,6 +12,8 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -108,7 +110,7 @@ public final class AdventureUtil {
 
     public static Component component(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
         final CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
-        final PlaceholderContext placeholderContext = StringUtil.getPlaceholders().contextOf(compiledMessage)
+        final PlaceholderContext placeholderContext = StringUtil.getPlaceholders().context(compiledMessage)
                 .with(placeholders);
 
         return component(text, placeholderContext, colorizePlaceholders);
@@ -149,7 +151,7 @@ public final class AdventureUtil {
 
     public static String process(@NonNull String text, @NonNull Locale locale, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
         final CompiledMessage compiledMessage = CompiledMessage.of(locale, text);
-        final PlaceholderContext placeholderContext = StringUtil.getPlaceholders().contextOf(compiledMessage)
+        final PlaceholderContext placeholderContext = StringUtil.getPlaceholders().context(compiledMessage)
                 .with(placeholders);
 
         return process(text, placeholderContext, colorizePlaceholders);
@@ -186,13 +188,7 @@ public final class AdventureUtil {
     }
 
     private static Map<String, String> renderFields(@NonNull PlaceholderContext placeholderContext) {
-        return placeholderContext.renderFields()
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        entry -> entry.getKey().getRaw(),
-                        Map.Entry::getValue
-                ));
+        return placeholderContext.renderFields();
     }
 
     private static TextReplacementConfig replacementConfig(@NonNull Map<String, String> replaceMap, boolean colorizePlaceholders) {
@@ -208,6 +204,102 @@ public final class AdventureUtil {
                     return PLACEHOLDER_MINI_MESSAGE.deserialize(value);
                 })
                 .build();
+    }
+
+    public static List<Component> component(@NonNull List<String> texts) {
+        return texts.stream()
+                .map(AdventureUtil::component)
+                .collect(Collectors.toList());
+    }
+
+    public static List<Component> component(@NonNull List<String> texts, @NonNull Map<String, Object> placeholders) {
+        return texts.stream()
+                .map(text -> component(text, placeholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Component> component(@NonNull List<String> texts, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+        return texts.stream()
+                .map(text -> component(text, placeholders, colorizePlaceholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Component> component(@NonNull List<String> texts, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
+        return texts.stream()
+                .map(text -> component(text, locale, placeholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Component> component(@NonNull List<String> texts, @NonNull Locale locale, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+        return texts.stream()
+                .map(text -> component(text, locale, placeholders, colorizePlaceholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> process(@NonNull List<String> texts) {
+        return texts.stream()
+                .map(AdventureUtil::process)
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> process(@NonNull List<String> texts, @NonNull Map<String, Object> placeholders) {
+        return texts.stream()
+                .map(text -> process(text, placeholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> process(@NonNull List<String> texts, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+        return texts.stream()
+                .map(text -> process(text, placeholders, colorizePlaceholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> process(@NonNull List<String> texts, @NonNull Locale locale, @NonNull Map<String, Object> placeholders) {
+        return texts.stream()
+                .map(text -> process(text, locale, placeholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> process(@NonNull List<String> texts, @NonNull Locale locale, @NonNull Map<String, Object> placeholders, boolean colorizePlaceholders) {
+        return texts.stream()
+                .map(text -> process(text, locale, placeholders, colorizePlaceholders))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Component> component(@NonNull String... texts) {
+        return Arrays.stream(texts)
+                .map(AdventureUtil::component)
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> process(@NonNull String... texts) {
+        return Arrays.stream(texts)
+                .map(AdventureUtil::process)
+                .collect(Collectors.toList());
+    }
+
+    public static String toLegacySection(@NonNull Component component) {
+        return AdventureUtil.rgbSupport
+                ? SECTION_SERIALIZER.serialize(component)
+                : LEGACY_SECTION_SERIALIZER.serialize(component);
+    }
+
+    public static String toLegacyAmpersand(@NonNull Component component) {
+        return AdventureUtil.rgbSupport
+                ? AMPERSAND_SERIALIZER.serialize(component)
+                : LEGACY_AMPERSAND_SERIALIZER.serialize(component);
+    }
+
+    public static Component fromLegacySection(@NonNull String legacyText) {
+        return AdventureUtil.rgbSupport
+                ? SECTION_SERIALIZER.deserialize(legacyText)
+                : LEGACY_SECTION_SERIALIZER.deserialize(legacyText);
+    }
+
+    public static Component fromLegacyAmpersand(@NonNull String legacyText) {
+        return AdventureUtil.rgbSupport
+                ? AMPERSAND_SERIALIZER.deserialize(legacyText)
+                : LEGACY_AMPERSAND_SERIALIZER.deserialize(legacyText);
     }
 
     public static void setRgbSupport(boolean rgbSupport) {

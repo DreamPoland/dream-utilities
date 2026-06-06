@@ -45,6 +45,14 @@ public class TicksUtil {
             throw new IllegalArgumentException("Cannot transform " + millis + " ms to ticks, too low value");
         }
 
-        return Math.toIntExact(millis / 50L);
+        long ticks = millis / 50L;
+        if (ticks > Integer.MAX_VALUE) {
+            if (failsafe) {
+                return Integer.MAX_VALUE;
+            }
+            throw new ArithmeticException("ticks overflow: " + ticks + " ticks is too large for an integer");
+        }
+
+        return (int) ticks;
     }
 }

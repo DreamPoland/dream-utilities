@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = "cc.dreamcode"
-    version = "1.5.8"
+    version = "1.5.9"
 
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
@@ -29,6 +29,11 @@ subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.compilerArgs.add("-parameters")
+    }
+
+    tasks.withType<Javadoc> {
+        options.encoding = "UTF-8"
+        isFailOnError = false
     }
 
     dependencies {

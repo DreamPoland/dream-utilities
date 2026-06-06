@@ -14,7 +14,6 @@ import org.bukkit.plugin.Plugin;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -129,10 +128,10 @@ public class ItemBuilder {
             return this;
         }
 
-        if (itemMeta.hasLore()) {
+        if (itemMeta.getLore() != null && !itemMeta.getLore().isEmpty()) {
             itemMeta.setLore(new ListBuilder<String>()
                     .addAll(lore)
-                    .addAll(Objects.requireNonNull(itemMeta.getLore()))
+                    .addAll(itemMeta.getLore())
                     .build());
         }
         else {
@@ -154,9 +153,9 @@ public class ItemBuilder {
             return this;
         }
 
-        if (itemMeta.hasLore()) {
+        if (itemMeta.getLore() != null && !itemMeta.getLore().isEmpty()) {
             itemMeta.setLore(new ListBuilder<String>()
-                    .addAll(Objects.requireNonNull(itemMeta.getLore()))
+                    .addAll(itemMeta.getLore())
                     .addAll(lore)
                     .build());
         }
@@ -226,12 +225,12 @@ public class ItemBuilder {
             return this;
         }
 
-        if (itemMeta.hasDisplayName()) {
+        if (itemMeta.getDisplayName() != null) {
             itemMeta.setDisplayName(StringColorUtil.fixColor(itemMeta.getDisplayName()));
         }
 
-        if (itemMeta.hasLore()) {
-            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+        if (itemMeta.getLore() != null && !itemMeta.getLore().isEmpty()) {
+            itemMeta.setLore(itemMeta.getLore()
                     .stream()
                     .map(StringColorUtil::fixColor)
                     .collect(Collectors.toList()));
@@ -248,14 +247,14 @@ public class ItemBuilder {
             return this;
         }
 
-        if (itemMeta.hasDisplayName()) {
+        if (itemMeta.getDisplayName() != null) {
             final String compiledMessage = StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders);
 
             itemMeta.setDisplayName(compiledMessage);
         }
 
-        if (itemMeta.hasLore()) {
-            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+        if (itemMeta.getLore() != null && !itemMeta.getLore().isEmpty()) {
+            itemMeta.setLore(itemMeta.getLore()
                     .stream()
                     .map(text -> StringColorUtil.fixColor(text, placeholders))
                     .collect(Collectors.toList()));
@@ -272,14 +271,14 @@ public class ItemBuilder {
             return this;
         }
 
-        if (itemMeta.hasDisplayName()) {
+        if (itemMeta.getDisplayName() != null) {
             final String compiledMessage = StringColorUtil.fixColor(itemMeta.getDisplayName(), placeholders, colorizePlaceholders);
 
             itemMeta.setDisplayName(compiledMessage);
         }
 
-        if (itemMeta.hasLore()) {
-            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+        if (itemMeta.getLore() != null && !itemMeta.getLore().isEmpty()) {
+            itemMeta.setLore(itemMeta.getLore()
                     .stream()
                     .map(text -> StringColorUtil.fixColor(text, placeholders, colorizePlaceholders))
                     .collect(Collectors.toList()));
@@ -296,12 +295,12 @@ public class ItemBuilder {
             return this;
         }
 
-        if (itemMeta.hasDisplayName()) {
+        if (itemMeta.getDisplayName() != null) {
             itemMeta.setDisplayName(StringColorUtil.breakColor(itemMeta.getDisplayName()));
         }
 
-        if (itemMeta.hasLore()) {
-            itemMeta.setLore(Objects.requireNonNull(itemMeta.getLore())
+        if (itemMeta.getLore() != null && !itemMeta.getLore().isEmpty()) {
+            itemMeta.setLore(itemMeta.getLore()
                     .stream()
                     .map(StringColorUtil::breakColor)
                     .collect(Collectors.toList()));
