@@ -2,7 +2,6 @@
 
 version: 2
 updates:
-  # Aktualizacje dla ekosystemu Gradle (Java/Kotlin)
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
@@ -11,16 +10,13 @@ updates:
       - "dependencies"
       - "gradle"
     ignore:
-      # Ignorowanie nowszych wersji Spigot API (utrzymanie wersji 1.8.8)
       - dependency-name: "org.spigotmc:spigot-api"
         versions:
           - "> 1.8.8-R0.1-SNAPSHOT"
-      # Ignorowanie wersji 5.0.0 i nowszych dla wszystkich bibliotek z rodziny Adventure
       - dependency-name: "net.kyori:adventure-*"
         versions:
           - ">= 5.0.0"
 
-  # Aktualizacje dla akcji GitHub Actions używanych w workflowach
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
