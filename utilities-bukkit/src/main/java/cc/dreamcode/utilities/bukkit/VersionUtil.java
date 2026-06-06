@@ -98,12 +98,12 @@ public class VersionUtil {
             if (Character.isDigit(c)) {
                 minorBuilder.append(c);
             } else {
-                if (!minorBuilder.isEmpty()) {
+                if (minorBuilder.length() > 0) {
                     break;
                 }
             }
         }
-        if (!minorBuilder.isEmpty()) {
+        if (minorBuilder.length() > 0) {
             return ParseUtil.parseInteger(minorBuilder.toString());
         }
         return Optional.empty();
