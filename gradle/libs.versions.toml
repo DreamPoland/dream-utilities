@@ -1,15 +1,22 @@
 [versions]
 lombok = "1.18.46"
-spigot-api = "1.8.8-R0.1-SNAPSHOT"
+spigot-api = "1.20.6-R0.1-SNAPSHOT"
+paper-api = "1.20.6-R0.1-SNAPSHOT"
 bungeecord-api = "1.21-R0.4"
 okaeri-placeholders = "6.0.0-beta.8"
-adventure-minimessage = "4.26.1"
-adventure-serializer = "4.26.1"
+adventure = "5.2.0"
+junit = "5.11.4"
 
 [libraries]
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api" }
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
 bungeecord-api = { module = "net.md-5:bungeecord-api", version.ref = "bungeecord-api" }
 okaeri-placeholders = { module = "eu.okaeri:okaeri-placeholders-core", version.ref = "okaeri-placeholders" }
-adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-minimessage" }
-adventure-serializer = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-serializer" }
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+adventure-serializer = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
+adventure-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+mockito-core = { module = "org.mockito:mockito-core", version = "5.14.2" }

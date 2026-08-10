@@ -7,6 +7,7 @@ repositories {
 
 dependencies {
     api(project(":utilities"))
+    api(project(":utilities-adventure"))
 
     // -- bungee api -- (base)
     compileOnly(libs.bungeecord.api)

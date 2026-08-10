@@ -1,24 +1,82 @@
+/*
+ * Copyright (c) 2026 DreamCode
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package cc.dreamcode.utilities.bukkit;
 
 import cc.dreamcode.utilities.Validation;
+import cc.dreamcode.utilities.adventure.AdventureUtil;
 import cc.dreamcode.utilities.bukkit.builder.ItemBuilder;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @UtilityClass
 public class InventoryUtil {
+
+    public static Inventory createInventory(InventoryHolder owner, int size, @NonNull ComponentLike title) {
+        return Bukkit.createInventory(owner, size, title.asComponent());
+    }
+
+    public static Inventory createInventory(InventoryHolder owner, @NonNull InventoryType type, @NonNull ComponentLike title) {
+        return Bukkit.createInventory(owner, type, title.asComponent());
+    }
+
+    public static Inventory createInventory(int size, @NonNull ComponentLike title) {
+        return createInventory(null, size, title);
+    }
+
+    public static Inventory createInventory(@NonNull InventoryType type, @NonNull ComponentLike title) {
+        return createInventory(null, type, title);
+    }
+
+    public static Inventory createInventory(InventoryHolder owner, int size, @NonNull String miniMessage) {
+        return createInventory(owner, size, AdventureUtil.component(miniMessage));
+    }
+
+    public static Inventory createInventory(InventoryHolder owner, int size, @NonNull String miniMessage, @NonNull Map<String, Object> placeholders) {
+        return createInventory(owner, size, AdventureUtil.component(miniMessage, placeholders));
+    }
+
+    public static Inventory createInventory(int size, @NonNull String miniMessage) {
+        return createInventory(null, size, miniMessage);
+    }
+
+    public static Inventory createInventory(int size, @NonNull String miniMessage, @NonNull Map<String, Object> placeholders) {
+        return createInventory(null, size, miniMessage, placeholders);
+    }
 
     public static void giveItem(@NonNull Player player, @NonNull ItemStack itemStack) {
         giveItems(player.getInventory(), player.getLocation(), Collections.singletonList(itemStack));

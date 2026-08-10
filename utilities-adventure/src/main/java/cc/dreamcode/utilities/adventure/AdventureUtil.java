@@ -1,9 +1,31 @@
+/*
+ * Copyright (c) 2026 DreamCode
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package cc.dreamcode.utilities.adventure;
 
 import cc.dreamcode.utilities.StringUtil;
 import eu.okaeri.placeholders.context.PlaceholderContext;
 import eu.okaeri.placeholders.message.CompiledMessage;
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -19,6 +41,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@UtilityClass
 public final class AdventureUtil {
 
     private static final Pattern ALL_TEXT_PATTERN = Pattern.compile(".*");
@@ -47,38 +70,33 @@ public final class AdventureUtil {
                     ? AMPERSAND_SERIALIZER.deserialize(result.group())
                     : LEGACY_AMPERSAND_SERIALIZER.deserialize(result.group()))
             .build();
+
     private static final TextReplacementConfig CLICKABLE_URL_REPLACEMENT = TextReplacementConfig.builder()
             .match(URL_PATTERN)
             .replacement(url -> url.clickEvent(ClickEvent.openUrl(url.content())))
             .build();
 
+    private static String preProcessText(String text) {
+        String replaceText = text;
+        replaceText = SECTION_COLOR_PATTERN.matcher(replaceText).replaceAll("&$1");
+        replaceText = LEGACY_RGB_PATTERN.matcher(replaceText).replaceAll("<#$1>");
+        return replaceText;
+    }
+
     private static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
-            .preProcessor(text -> {
-                String replaceText = text;
-                replaceText = SECTION_COLOR_PATTERN.matcher(replaceText).replaceAll("&$1");
-                replaceText = LEGACY_RGB_PATTERN.matcher(replaceText).replaceAll("<#$1>");
-                return replaceText;
-            })
+            .preProcessor(AdventureUtil::preProcessText)
             .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT)
                     .replaceText(AMPERSAND_REPLACEMENTS))
             .build();
+
     private static final MiniMessage PLACEHOLDER_MINI_MESSAGE = MiniMessage.builder()
-            .preProcessor(text -> {
-                String replaceText = text;
-                replaceText = SECTION_COLOR_PATTERN.matcher(replaceText).replaceAll("&$1");
-                replaceText = LEGACY_RGB_PATTERN.matcher(replaceText).replaceAll("<#$1>");
-                return replaceText;
-            })
+            .preProcessor(AdventureUtil::preProcessText)
             .tags(TagResolver.empty())
             .postProcessor(component -> component.replaceText(CLICKABLE_URL_REPLACEMENT))
             .build();
+
     private static final MiniMessage COLORIZED_PLACEHOLDER_MINI_MESSAGE = MiniMessage.builder()
-            .preProcessor(text -> {
-                String replaceText = text;
-                replaceText = SECTION_COLOR_PATTERN.matcher(replaceText).replaceAll("&$1");
-                replaceText = LEGACY_RGB_PATTERN.matcher(replaceText).replaceAll("<#$1>");
-                return replaceText;
-            })
+            .preProcessor(AdventureUtil::preProcessText)
             .tags(TagResolver.builder()
                     .resolver(StandardTags.color())
                     .resolver(StandardTags.decorations())
@@ -117,24 +135,16 @@ public final class AdventureUtil {
     }
 
     private static Component component(@NonNull String text, @NonNull PlaceholderContext placeholderContext, boolean colorizePlaceholders) {
-
         final Component component = MINI_MESSAGE.deserialize(text);
-
-        final Map<String, String> fields = renderFields(placeholderContext);
+        final Map<String, String> fields = placeholderContext.renderFields();
         final TextReplacementConfig replacementConfig = replacementConfig(fields, colorizePlaceholders);
 
         return component.replaceText(replacementConfig);
     }
 
     public static String process(@NonNull String text) {
-
         final Component component = MINI_MESSAGE.deserialize(text);
-
-        if (AdventureUtil.rgbSupport) {
-            return SECTION_SERIALIZER.serialize(component);
-        }
-
-        return LEGACY_SECTION_SERIALIZER.serialize(component);
+        return toLegacySection(component);
     }
 
     public static String process(@NonNull String text, @NonNull Map<String, Object> placeholders) {
@@ -158,37 +168,17 @@ public final class AdventureUtil {
     }
 
     private static String process(@NonNull String text, @NonNull PlaceholderContext placeholderContext, boolean colorizePlaceholders) {
-
         Component component = MINI_MESSAGE.deserialize(text);
-
-        final Map<String, String> fields = renderFields(placeholderContext);
+        final Map<String, String> fields = placeholderContext.renderFields();
         final TextReplacementConfig replacementConfig = replacementConfig(fields, colorizePlaceholders);
 
         component = component.replaceText(replacementConfig);
-
-        if (AdventureUtil.rgbSupport) {
-            return SECTION_SERIALIZER.serialize(component);
-        }
-
-        return LEGACY_SECTION_SERIALIZER.serialize(component);
+        return toLegacySection(component);
     }
 
     public static String deprocess(@NonNull String text) {
-
-        final Component component;
-
-        if (AdventureUtil.rgbSupport) {
-            component = SECTION_SERIALIZER.deserialize(text);
-        }
-        else {
-            component = LEGACY_SECTION_SERIALIZER.deserialize(text);
-        }
-
+        final Component component = fromLegacySection(text);
         return MINI_MESSAGE.serialize(component);
-    }
-
-    private static Map<String, String> renderFields(@NonNull PlaceholderContext placeholderContext) {
-        return placeholderContext.renderFields();
     }
 
     private static TextReplacementConfig replacementConfig(@NonNull Map<String, String> replaceMap, boolean colorizePlaceholders) {
@@ -196,6 +186,9 @@ public final class AdventureUtil {
                 .match(FIELD_PATTERN)
                 .replacement((result, input) -> {
                     final String value = replaceMap.get(result.group(1));
+                    if (value == null) {
+                        return Component.text(result.group());
+                    }
 
                     if (colorizePlaceholders) {
                         return COLORIZED_PLACEHOLDER_MINI_MESSAGE.deserialize(value);

@@ -1,11 +1,13 @@
-repositories {
-    maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://maven.reposilite.com/maven-central")
-}
-
 dependencies {
     api(project(":utilities"))
+    api(project(":utilities-adventure"))
 
-    // -- spigot api -- (base)
-    compileOnly(libs.spigot.api)
+    // -- paper api 1.20.6 --
+    compileOnly(libs.paper.api)
+    compileOnly(libs.adventure.minimessage)
+
+    testImplementation(libs.paper.api)
+    testImplementation(libs.adventure.minimessage)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockito.core)
 }

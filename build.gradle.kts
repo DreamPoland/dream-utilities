@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = "cc.dreamcode"
-    version = "1.6.1"
+    version = "2.0.0"
 
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
@@ -14,13 +14,15 @@ allprojects {
         mavenCentral()
         maven("https://repo.dreamcode.cc/releases")
         maven("https://storehouse.okaeri.eu/repository/maven-public")
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
 }
 
 subprojects {
     java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
 
         withSourcesJar()
         withJavadocJar()
@@ -36,11 +38,18 @@ subprojects {
         isFailOnError = false
     }
 
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
+
     dependencies {
         compileOnly(rootProject.libs.lombok)
         annotationProcessor(rootProject.libs.lombok)
         testCompileOnly(rootProject.libs.lombok)
         testAnnotationProcessor(rootProject.libs.lombok)
+        testImplementation(rootProject.libs.junit.jupiter)
+        testImplementation(rootProject.libs.mockito.core)
+        testRuntimeOnly(rootProject.libs.junit.launcher)
     }
 
     publishing {
@@ -64,17 +73,6 @@ subprojects {
         publications {
             create<MavenPublication>("library") {
                 from(components.getByName("java"))
-
-                pom.withXml {
-                    val repositories = asNode().appendNode("repositories")
-                    project.repositories.findAll(closureOf<Any> {
-                        if (this is MavenArtifactRepository && this.url.toString().startsWith("https")) {
-                            val repository = repositories.appendNode("repository")
-                            repository.appendNode("id", this.url.toString().replace("https://", "").replace("/", "-").replace(".", "-").trim())
-                            repository.appendNode("url", this.url.toString().trim())
-                        }
-                    })
-                }
             }
         }
     }
