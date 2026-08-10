@@ -155,7 +155,7 @@ dependencies {
 
 ## 📖 Complete Wiki
 
-For detailed documentation, sitemaps, and advanced API guides, visit the [Dream-Utilities Wiki](wiki/Home.md).
+For detailed documentation, sitemaps, and advanced API guides, visit the [Dream-Utilities Wiki](https://github.com/DreamPoland/dream-utilities/wiki).
 
 ---
 
