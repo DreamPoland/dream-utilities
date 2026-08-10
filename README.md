@@ -115,7 +115,7 @@ repositories {
 ```kotlin
 // Gradle
 dependencies {
-    implementation("cc.dreamcode:utilities-bukkit:2.0.0")
+    implementation("cc.dreamcode:utilities-bukkit:2.0.1")
 }
 ```
 ```xml
@@ -123,7 +123,7 @@ dependencies {
 <dependency>
   <groupId>cc.dreamcode</groupId>
   <artifactId>utilities-bukkit</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
@@ -131,7 +131,7 @@ dependencies {
 ```kotlin
 // Gradle
 dependencies {
-    implementation("cc.dreamcode:utilities-bungee:2.0.0")
+    implementation("cc.dreamcode:utilities-bungee:2.0.1")
 }
 ```
 ```xml
@@ -139,7 +139,7 @@ dependencies {
 <dependency>
   <groupId>cc.dreamcode</groupId>
   <artifactId>utilities-bungee</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
@@ -147,7 +147,7 @@ dependencies {
 ```kotlin
 // Gradle
 dependencies {
-    implementation("cc.dreamcode:utilities-adventure:2.0.0")
+    implementation("cc.dreamcode:utilities-adventure:2.0.1")
 }
 ```
 
