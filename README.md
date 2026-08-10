@@ -115,7 +115,7 @@ repositories {
 ```kotlin
 // Gradle
 dependencies {
-    implementation("cc.dreamcode.utilities:utilities-bukkit:2.0.0")
+    implementation("cc.dreamcode:utilities-bukkit:2.0.0")
 }
 ```
 ```xml
@@ -131,7 +131,7 @@ dependencies {
 ```kotlin
 // Gradle
 dependencies {
-    implementation("cc.dreamcode.utilities:utilities-bungee:2.0.0")
+    implementation("cc.dreamcode:utilities-bungee:2.0.0")
 }
 ```
 ```xml
@@ -147,7 +147,7 @@ dependencies {
 ```kotlin
 // Gradle
 dependencies {
-    implementation("cc.dreamcode.utilities:utilities-adventure:2.0.0")
+    implementation("cc.dreamcode:utilities-adventure:2.0.0")
 }
 ```
 
