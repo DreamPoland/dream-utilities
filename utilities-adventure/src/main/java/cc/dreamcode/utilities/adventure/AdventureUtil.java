@@ -50,15 +50,15 @@ public final class AdventureUtil {
     private static final Pattern LEGACY_RGB_PATTERN = Pattern.compile("&#([a-fA-F0-9]{6})");
     private static final Pattern URL_PATTERN = Pattern.compile("https?:\\/\\/(www\\.)?[a-zA-Z0-9\\-._~%]{1,256}\\.[a-zA-Z]{1,6}(\\/[a-zA-Z0-9\\-._~%!$&'()*+,;=:@/#?]*)?");
 
-    private static final LegacyComponentSerializer SECTION_SERIALIZER = LegacyComponentSerializer.legacySection()
-            .toBuilder()
+    private static final LegacyComponentSerializer SECTION_SERIALIZER = LegacyComponentSerializer.builder()
+            .character(LegacyComponentSerializer.SECTION_CHAR)
             .hexColors()
             .useUnusualXRepeatedCharacterHexFormat()
             .build();
     private static final LegacyComponentSerializer LEGACY_SECTION_SERIALIZER = LegacyComponentSerializer.legacySection();
 
-    private static final LegacyComponentSerializer AMPERSAND_SERIALIZER = LegacyComponentSerializer.legacyAmpersand()
-            .toBuilder()
+    private static final LegacyComponentSerializer AMPERSAND_SERIALIZER = LegacyComponentSerializer.builder()
+            .character(LegacyComponentSerializer.AMPERSAND_CHAR)
             .hexColors()
             .useUnusualXRepeatedCharacterHexFormat()
             .build();
