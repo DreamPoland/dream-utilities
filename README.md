@@ -36,7 +36,7 @@ AudienceUtil.sendMessage(player, "<green>Welcome <yellow>{player}</yellow>!</gre
 ```java
 ItemStack sword = ItemBuilder.of(Material.DIAMOND_SWORD)
     .setName("<gradient:red:gold><bold>Excalibur</bold></gradient>")
-    .setLoreStrings(List.of(
+    .setLore(List.of(
         "<gray>Damage: <red>+{damage}</red></gray>",
         "<yellow>Owner: {owner}</yellow>"
     ), Map.of("damage", 150, "owner", player.getName()))

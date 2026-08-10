@@ -183,12 +183,12 @@ public class ItemBuilder {
         return this.startLoreWith(Arrays.asList(lore));
     }
 
-    public ItemBuilder startLoreWithComponents(@NonNull List<? extends ComponentLike> lore) {
+    public ItemBuilder startLoreWith(@NonNull ComponentLike... lore) {
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         if (itemMeta == null) {
             return this;
         }
-        List<Component> newLoreComponents = lore.stream().map(ComponentLike::asComponent).collect(Collectors.toList());
+        List<Component> newLoreComponents = Arrays.stream(lore).map(ComponentLike::asComponent).collect(Collectors.toList());
         List<Component> existingLore = itemMeta.lore();
         if (existingLore != null && !existingLore.isEmpty()) {
             itemMeta.lore(new ListBuilder<Component>()
@@ -200,10 +200,6 @@ public class ItemBuilder {
         }
         this.itemStack.setItemMeta(itemMeta);
         return this;
-    }
-
-    public ItemBuilder startLoreWithComponents(@NonNull ComponentLike... lore) {
-        return this.startLoreWithComponents(Arrays.asList(lore));
     }
 
     public ItemBuilder appendLore(@NonNull List<String> lore) {
@@ -230,12 +226,12 @@ public class ItemBuilder {
         return this.appendLore(Arrays.asList(lore));
     }
 
-    public ItemBuilder appendLoreComponents(@NonNull List<? extends ComponentLike> lore) {
+    public ItemBuilder appendLore(@NonNull ComponentLike... lore) {
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         if (itemMeta == null) {
             return this;
         }
-        List<Component> newLoreComponents = lore.stream().map(ComponentLike::asComponent).collect(Collectors.toList());
+        List<Component> newLoreComponents = Arrays.stream(lore).map(ComponentLike::asComponent).collect(Collectors.toList());
         List<Component> existingLore = itemMeta.lore();
         if (existingLore != null && !existingLore.isEmpty()) {
             itemMeta.lore(new ListBuilder<Component>()
@@ -247,10 +243,6 @@ public class ItemBuilder {
         }
         this.itemStack.setItemMeta(itemMeta);
         return this;
-    }
-
-    public ItemBuilder appendLoreComponents(@NonNull ComponentLike... lore) {
-        return this.appendLoreComponents(Arrays.asList(lore));
     }
 
     public ItemBuilder setLore(@NonNull List<String> lore) {
@@ -269,27 +261,20 @@ public class ItemBuilder {
         return this.setLore(Arrays.asList(lore));
     }
 
-    public ItemBuilder setLoreComponents(@NonNull List<? extends ComponentLike> lore) {
+    public ItemBuilder setLore(@NonNull ComponentLike... lore) {
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         if (itemMeta == null) {
             return this;
         }
-        List<Component> components = lore.stream().map(ComponentLike::asComponent).collect(Collectors.toList());
+        List<Component> components = Arrays.stream(lore).map(ComponentLike::asComponent).collect(Collectors.toList());
         itemMeta.lore(components);
         this.itemStack.setItemMeta(itemMeta);
         return this;
     }
 
-    public ItemBuilder setLoreComponents(@NonNull ComponentLike... lore) {
-        return this.setLoreComponents(Arrays.asList(lore));
-    }
-
-    public ItemBuilder setLoreStrings(@NonNull List<String> miniMessages) {
-        return this.setLoreComponents(AdventureUtil.component(miniMessages));
-    }
-
-    public ItemBuilder setLoreStrings(@NonNull List<String> miniMessages, @NonNull Map<String, Object> placeholders) {
-        return this.setLoreComponents(AdventureUtil.component(miniMessages, placeholders));
+    public ItemBuilder setLore(@NonNull List<String> miniMessages, @NonNull Map<String, Object> placeholders) {
+        List<Component> components = AdventureUtil.component(miniMessages, placeholders);
+        return this.setLore(components.toArray(new Component[0]));
     }
 
     public ItemBuilder replacePlaceholders(@NonNull Map<String, Object> placeholders) {
