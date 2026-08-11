@@ -19,4 +19,4 @@ adventure-serializer = { module = "net.kyori:adventure-text-serializer-legacy", 
 adventure-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-mockito-core = { module = "org.mockito:mockito-core", version = "5.14.2" }
+mockito-core = { module = "org.mockito:mockito-core", version = "5.23.0" }
